@@ -1,0 +1,50 @@
+--1
+
+create table cust_vehicle
+(
+	sale_id int, 
+	custid int , 
+	vid int, sid int , buy_price int);
+
+insert into cust_vehicle(sale_id, custid, vid, sid, buy_price)
+values(1,1,1,10,75000),
+(2,1,2,10,97000),
+(3,2,3,11,80000),
+(4,3,3,11,75000),
+(5,3,2,10,80000);
+
+
+select cv.sale_id, cv.custid, cv.buy_price , c.cname
+from cust_vehicle cv , vehicle v, customer c
+where v.vid = cv.vid and c.custid = cv.custid;
+
+
+select cv.sale_id, cv.custid, c.cname, cv.vid, v.vanme, s.sid, s.sname, cv.buy_price
+from cust_vehicle cv, customer c , salesman s, vehicle v
+where cv.vid = v.vid and  cv.custid = c.custid and cv.sid = s.sid;
+
+
+--3 
+select e.ename, e.deptno, d.dname, e.sal, e.job
+from  emp e, dept d
+where  e.deptno = d.deptno
+and (e.deptno = 20 OR e.deptno = 30)
+and e.comm is null and e.comm = 0;
+
+--2
+select e.ename, e.deptno, d.dname, e.sal, e.job
+from emp e, dept d
+where e.deptno = d.deptno 
+and (job = 'clerk' or job = 'salesman')
+and e.sal>1200;
+
+--4 
+select e.ename, e.sal, s.grade
+from emp e, salgrade s
+where e.sal between s.losal and s.hisal; 
+
+
+--5 
+select e.job, e.deptno, d.name d.loc
+from emp e, dept d
+where e.deptno = d.deptno; 

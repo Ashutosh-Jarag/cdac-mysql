@@ -1,0 +1,27 @@
+-- storered procedures as functions 
+
+delimiter //
+create procedure add(a int, b int)
+begin
+	declare c int;
+	set c = a+b;
+	select c;
+end // 
+delimiter ; 
+
+
+call add(10,10);
+
+
+-- create procedure add(in int a, int b int, out c int )
+begin
+	set c = a+b;
+end // 
+delimiter ; 
+
+call add(5,6,@c);
+select @c "sum";
+set c = 5;
+set @y = 6;
+
+call add()

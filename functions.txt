@@ -1,0 +1,116 @@
+
+
+---increment sal by 5000
+
+
+DELIMITER //
+CREATE FUNCTION increment(msal DECIMAL(7,2)) 
+RETURNS DECIMAL(7,2)
+DETERMINISTIC
+BEGIN
+    SET msal = msal + 5000;
+    RETURN msal;
+END //
+DELIMITER ;
+
+
+select ename,deptno,sal,increment(sal) "Increment"
+from emp;
+
+select e.ename,e.deptno,d.dname,e.sal,increment(e.sal) "Increment"
+from emp e
+join dept d
+on e.deptno=d.deptno
+where e.job='analyst';
+
+
+
+
+--1
+DELIMITER //
+CREATE FUNCTION sumcomm(msal DECIMAL(7,2), mcomm DECIMAL(7,2))
+RETURNS DECIMAL(7,2)
+DETERMINISTIC
+BEGIN
+    DECLARE total_sal DECIMAL(7,2);
+    SET total_sal = msal + IFNULL(mcomm, 0);
+    RETURN total_sal;
+END //
+DELIMITER ;
+
+SELECT ename, sal, comm, sumcomm(sal, comm) AS total_salary
+FROM emp;
+
+
+--2     
+DELIMITER //
+CREATE FUNCTION email(n varchar(20), j varchar(20))
+RETURNS varchar(100)
+
+DETERMINISTIC
+BEGIN
+		declare emails varchar(100);
+		set emails = concat(substr(n,1,2), substr(j,2),'@knowit.com');
+		return emails;
+		
+END //
+DELIMITER ;
+
+select empno, ename, sal, job, email(ename, job) as email
+from emp;          
+
+
+--3
+DELIMITER  //
+create function factorial(n int) returns int
+DETERMINISTIC
+begin 
+	declare fact int default 1;
+	declare i int default 1;
+	
+	while i <= n do
+		set fact = fact *i;
+		set i = i+1;
+	end while;
+	return fact;
+end //
+DELIMITER ;
+ 
+
+select factorial(5);
+ 
+ 
+DELIMITER //
+create procedure facto(in n int, out result int)
+begin 
+	set result = factorial(n);
+	
+end // 
+DELIMITER ;
+
+call facto(5,@p);
+select @p;
+
+
+
+--4
+DELIMITER //
+CREATE FUNCTION get_anual_salary(msal DECIMAL(7,2), mcomm DECIMAL(7,2))
+RETURNS DECIMAL(7,2)
+DETERMINISTIC 
+BEGIN
+    DECLARE total_sal DECIMAL(7,2);
+    SET total_sal = (msal + IFNULL(mcomm, 0))*12;
+    RETURN total_sal;
+END //
+DELIMITER ;
+ 
+ 
+SELECT e.empno, e.ename, e.deptno, e.job, s.grade, get_anual_salary(e.sal, e.comm) as anual_salary
+FROM emp e
+JOIN salgrade s 
+  ON e.sal BETWEEN s.losal AND s.hisal 
+WHERE e.job = 'MANAGER';
+ 
+ 
+--5

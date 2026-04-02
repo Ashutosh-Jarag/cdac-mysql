@@ -1,0 +1,317 @@
+Day 3 Assignments 
+
+
+
+
+--1
+
+ALTER TABLE emp
+ADD PRIMARY KEY (empno);
+
+ALTER TABLE vehicle
+ADD PRIMARY KEY (vid);
+
+ALTER TABLE customer
+ADD PRIMARY KEY (custid);
+
+ALTER TABLE salesman
+ADD PRIMARY KEY (sid);
+
+
+--2
+
+
+ALTER TABLE vehicle
+ADD COLUMN category VARCHAR(100);
+
+INSERT INTO vehicle(vid, vanme, price, discount, milage, details, category)
+VALUES
+(8, 'Passion', 90000, NULL, 50, 'For passionate riders.', 'Bike'),
+(9, 'Honda City', 140000, NULL, 20, 'Best in honda table', 'Car'),
+(10, 'TVS iCube', 140000, NULL, 40, 'Best in new world', 'EV');
+
+
+--3 
+CREATE TABLE emp11 AS select * from emp;
+
+ALTER TABLE emp11
+ADD PRIMARY KEY(empno);
+
+
+
+
+--5 
+CREATE TABLE modules (
+    cid VARCHAR(10) PRIMARY KEY,
+    cname VARCHAR(50) UNIQUE NOT NULL,
+    fees DECIMAL(10, 2) DEFAULT 5000
+);
+
+INSERT INTO modules (cid, cname, fees) VALUES
+('c1', 'Core Java', 7000),
+('c2', 'Linux', 8000),
+('c3', 'Data Structure', 10000),
+('c4', 'Python', 12000),
+('c5', 'Dot Net', NULL),
+('c6', 'Big Data', 20000);
+
+CREATE TABLE faculty (
+    tid VARCHAR(10) PRIMARY KEY,
+    tname VARCHAR(50) NOT NULL,
+    cid VARCHAR(10),
+    salary DECIMAL(10, 2) DEFAULT 20000,
+    experience INT CHECK (experience >= 10),
+    CONSTRAINT fk_modules FOREIGN KEY (cid) REFERENCES modules(cid)
+);
+
+
+
+INSERT INTO faculty (tid, tname, cid, salary, experience) VALUES
+('t1', 'Amit', 'c2', 20000, 10),
+('t2', 'Rajan', 'c1', 20000, 10),
+('t3', 'Shruti', 'c2', 20000, 15),
+('t4', 'Arti', 'c2', 20000, 12),
+('t5', 'Sameer', 'c3', 20000, 11),
+('t6', 'Sanjay', NULL, 20000, 10),
+('t7', 'Soha', NULL, 20000, 13);
+
+
+CREATE TABLE trainer (
+    tid VARCHAR(10) PRIMARY KEY,
+    tname VARCHAR(50) NOT NULL,
+    cid VARCHAR(10),
+    salary DECIMAL(10, 2) DEFAULT 20000,
+    experience INT CHECK (experience >= 10),
+    CONSTRAINT fk_modules1 FOREIGN KEY (cid) REFERENCES modules(cid)
+);
+
+INSERT INTO trainer (tid, tname, cid, salary, experience) VALUES
+('t1', 'Amit', 'c2', 20000, 10),
+('t2', 'Rajan', 'c1', 20000, 10),
+('t3', 'Shruti', 'c2', 20000, 15),
+('t4', 'Arti', 'c2', 20000, 12),
+('t5', 'Sameer', 'c3', 20000, 11),
+('t6', 'Sanjay', NULL, 20000, 10),
+('t7', 'Soha', NULL, 20000, 13);
+
+
+--5.1
+UPDATE modules
+set cid = 'c8'
+where cname = 'Dot Net';
+
+--5.2
+UPDATE faculty 
+set cid = 'c2' where tname = 'Sanjay';
+
+UPDATE faculty 
+set cid = 'c15' where tname = 'Soha'; 
+
+
+--5.3
+INSERT INTO faculty(tid, tname, cid, salary, experience)
+VALUES
+('t8', 'Miller', 'c17', 'WP', 20);
+
+--5.4
+DELETE from modules
+where cname  = 'Big Data';
+
+--5.5
+DELETE from modules
+where cname = 'Linux';
+
+--5.6
+Drop table modules;
+
+
+
+--EXTRAS
+1) NOT NULL
+ALTER TABLE student
+ADD COLUMN age INT;
+
+UPDATE student SET age = 25 WHERE rollno = 1;
+UPDATE student SET age = 24 WHERE rollno = 2;
+UPDATE student SET age = 25 WHERE rollno = 3;
+UPDATE student SET age = 23 WHERE rollno = 4;
+UPDATE student SET age = 24 WHERE rollno = 5;
+UPDATE student SET age = 25 WHERE rollno = 6;
+UPDATE student SET age = 23 WHERE rollno = 7;
+UPDATE student SET age = 24 WHERE rollno = 8;
+UPDATE student SET age = 25 WHERE rollno = 9;
+UPDATE student SET age = 23 WHERE rollno = 10;
+
+
+UPDATE student
+SET age = CASE rollno
+    WHEN 1  THEN 25
+    WHEN 2  THEN 24
+    WHEN 3  THEN 25
+    WHEN 4  THEN 23
+    WHEN 5  THEN 24
+    WHEN 6  THEN 25
+    WHEN 7  THEN 23
+    WHEN 8  THEN 24
+    WHEN 9  THEN 25
+    WHEN 10 THEN 23
+END;
+
+
+ALTER TABLE student
+MODIFY COLUMN age INT NOT NULL;
+
+
+2) check constrait
+
+ALTER TABLE student
+ADD CONSTRAINT age check(age>18);
+
+ALTER TABLE student
+ADD CONSTRAINT per check(per > 35);
+
+
+3)
+ALTER TABLE student
+ADD CONSTRAINT def_city defualt city = 'Pune';
+
+
+4)
+ALTER TABLE student
+ADD CONSTRAINT uq UNIQUE(adhar_no);
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+
+
+--6
+----------------book-------------------------
+
+CREATE TABLE book
+(
+bid INT AUTO_INCREMENT,
+bname VARCHAR(20),
+lid INT,
+aid INT,
+CONSTRAINT  pk_bid PRIMARY  KEY(bid),
+CONSTRAINT  fk_lid FOREIGN KEY(lid) REFERENCES language(lid) on delete set null,
+CONSTRAINT  fk_aid FOREIGN KEY(aid) REFERENCES author(aid) on delete set null
+);
+
+
+INSERT INTO book(bname, lid, aid)
+VALUES
+('GODAN', 3, 2),
+('SHRIMAN YOGI',1,4),
+('HARRY POTTER',2,1),
+('THE GODFATHER', 2,3);
+
+
+
+----------------language-------------------------
+CREATE TABLE language(
+lid INT PRIMARY KEY,
+lname VARCHAR(20)
+);
+
+INSERT INTO language(lid, lname)
+VALUES
+(1,'Marathi'),
+(2, 'English'),
+(3, 'Hindi');
+
+
+
+------------------author---------------------
+CREATE TABLE author(
+aid INT PRIMARY KEY,
+aname VARCHAR(20)
+);
+
+INSERT INTO author(aid, aname)
+VALUES
+(1, 'JK ROWLING'),
+(2, 'Munshi'),
+(3, 'Mario'),
+(4, 'Ranjeet');
+
+
+
+
+
+
+--6.1
+DELETE from language
+where lname = 'Marathi';
+
+
+--6.2
+
+DELETE from author
+where aname = 'JK ROWLING';
+
+--6.3
+drop table language;
+
+drop table author;
+
+drop table book;
+
+--6.4
+----------------book-------------------------
+
+CREATE TABLE book
+(
+bid INT AUTO_INCREMENT,
+bname VARCHAR(20),
+lid INT,
+aid INT,
+CONSTRAINT  pk_bid PRIMARY  KEY(bid),
+CONSTRAINT  fk_lid FOREIGN KEY(lid) REFERENCES language(lid) on delete set null,
+CONSTRAINT  fk_aid FOREIGN KEY(aid) REFERENCES author(aid) on delete set null
+);
+
+
+INSERT INTO book(bname, lid, aid)
+VALUES
+('GODAN', 3, 2),
+('SHRIMAN YOGI',1,4),
+('HARRY POTTER',2,1),
+('THE GODFATHER', 2,3);
+
+
+
+----------------language-------------------------
+CREATE TABLE language(
+lid INT PRIMARY KEY,
+lname VARCHAR(20)
+);
+
+INSERT INTO language(lid, lname)
+VALUES
+(1,'Marathi'),
+(2, 'English'),
+(3, 'Hindi');
+
+
+
+------------------author---------------------
+CREATE TABLE author(
+aid INT PRIMARY KEY,
+aname VARCHAR(20)
+);
+
+INSERT INTO author(aid, aname)
+VALUES
+(1, 'JK ROWLING'),
+(2, 'Munshi'),
+(3, 'Mario'),
+(4, 'Ranjeet');
+
+
+
+INSERT INTO book(bname, lid, aid)
+VALUES
+("ranga",7,8);

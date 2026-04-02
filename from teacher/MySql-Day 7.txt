@@ -1,0 +1,155 @@
+alter table emp100
+add constraint pk_empno primary key(empno);
+
+create index idx_on 
+on emp100(deptno);
+
+create index idx_on1
+on emp100(job);
+
+show index from emp100;
+
+drop index idx_on on emp100;
+
+alter table emp100
+drop primary key;
+
+===========================
+
+stored procedures
+
+-display data from dept table
+
+delimiter //
+create procedure display_dept_data()
+begin
+    select * from dept;
+end //
+delimiter ;
+
+mysql>call display_dept_data;
+===========================================
+-insert new dept in dept table and disply
+delimiter $$
+create procedure insert_data()
+begin
+   insert into dept
+   values(80,'HR','Pune');
+   select * from dept;
+end $$
+delimiter ;
+mysql>call insert_data();
+=================================
+IN PARAMETER
+-pass deptno as in parameter and find max sal fro that dept
+
+delimiter //
+create procedure display_max_sal(in n int)
+begin
+   select max(sal) from emp where deptno=n;
+end //
+delimiter ;
+
+mysql>call display_max_sal(30);
+-------------------------------
+-pass deptno,name and loc as parameters to the proc and insert the data
+
+delimiter //
+drop procedure if exists insert_new_data;
+create procedure insert_new_data(n int, name varchar(15),location varchar(15))
+begin
+  insert into dept
+  values(n,name,location); 
+  select * from dept;
+end //
+delimiter ;
+
+mysql>call insert_new_data(100,'Mkt','Kanpur');
+===============================================
+OUT PARAMETERS
+
+-find max sal for dept 20 and display it out of the procedure
+
+delimiter //
+drop procedure if exists displ_max_sal;
+create procedure displ_max_sal(out n decimal(7,2))
+begin
+  select max(sal) into n
+  from emp
+  where deptno=20 ;   
+end //
+delimiter ;
+
+mysql>call displ_max_sal(@p);
+mysql>select @p;
+
+======================================
+-pass deptno as input to proc and find disp max sal out of procedure
+
+in parameter ----deptno
+out   ----- max sal
+
+delimiter //
+drop procedure if exists display_max_sal;
+
+create procedure display_max_sal(in n int, out msal decimal(7,2))
+begin
+    select max(sal) into msal
+    from emp
+    where deptno=n;
+end //
+delimiter ;
+
+mysql>call display_max_sal(30,@q);
+====================================
+
+INOUT parameter
+
+-Write a procedure to display deptno for any empno passed as a parameter to
+the proc. Diplay deptno out of the procedure.
+
+in parameter - empno
+out parameter -deptno
+
+delimiter //
+drop procedure if exists display_deptno_1;
+
+delimiter //
+create procedure display_deptno_1(in meno int, out mdno int)
+begin
+   select deptno into mdno
+   from emp
+   where empno=meno;
+end //
+delimiter ;
+
+call display_deptno_1(7499,@p);
+-----------------------------------------
+INOUT
+delimiter //
+drop procedure if exists display_deptno_2;
+create procedure display_deptno_2(inout x int)
+begin
+   select deptno into x
+   from emp
+   where empno=x;
+end //
+delimiter ;
+
+call display_deptno_2(7499);
+
+======================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+

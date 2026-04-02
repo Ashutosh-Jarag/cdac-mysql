@@ -1,0 +1,255 @@
+--1
+select * from emp 
+where sal > (select sal from emp where ename = 'smith');
+
+
+--2 
+select * from emp
+where sal > all (select sal from emp where ename in ('martin', 'ford'));
+
+--3
+select * from emp
+where sal between (select sal from emp where ename = 'adams') and (select sal from emp where ename = 'scott');
+
+--4
+select * from emp 
+where sal > any (select sal from emp where ename = 'ward' or ename = 'blake');
+
+
+--5
+select * from emp 
+where sal > (select avg(sal) from emp where deptno =10);
+
+
+--6 
+select * from emp 
+where deptno in (select deptno from dept where dname = 'sales');
+
+
+--7 
+SELECT deptno, SUM(sal), MIN(sal)
+FROM emp
+WHERE ename IN (SELECT ename FROM emp WHERE job = 'MANAGER')
+GROUP BY deptno;
+
+
+select deptno, sum(sal)over(), min(sal)over()
+from emp
+where job =  'manager';
+
+
+--8
+CREATE TABLE category (
+    cid INT PRIMARY KEY,
+    cname VARCHAR(15) UNIQUE NOT NULL,
+    description VARCHAR(30)
+);
+
+INSERT INTO category VALUES
+(1, 'chips', 'very crunchy'),
+(2, 'chocolate', 'very chocolaty'),
+(3, 'snacks', 'yummy'),
+(4, 'cold drinks', 'thanda thanda cool cool');
+
+CREATE TABLE salesman (
+    sid INT PRIMARY KEY,
+    sname VARCHAR(15) UNIQUE NOT NULL,
+    city VARCHAR(15)
+);
+
+INSERT INTO salesman VALUES
+(11, 'Rahul', 'Pune'),
+(12, 'Kirti', 'Mumbai'),
+(13, 'Prasad', 'Nashik'),
+(14, 'Arnav', 'Amravati');
+
+
+CREATE TABLE product (
+    pid INT PRIMARY KEY,
+    pname VARCHAR(20),
+    price FLOAT(6,2) DEFAULT 20.00,
+    qty INT CHECK(qty > 0),
+    cid INT,
+    sid INT,
+    CONSTRAINT fk_cid FOREIGN KEY(cid) REFERENCES category(cid) ON DELETE SET NULL,
+    CONSTRAINT fk_sid FOREIGN KEY(sid) REFERENCES salesman(sid)
+);
+
+
+INSERT INTO product VALUES
+(123, 'lays', 30.00, 30, 1, 12),
+(111, 'pepsi', 50.00, 40, 4, 11),
+(134, 'nachos', 50.00, 50, 1, 12),
+(124, 'dairy milk', 60.00, 40, 2, 14),
+(125, 'pringles', 60.00, 40, 1, 14),
+(213, 'Sketch Pens', 150.00, 56, NULL, 11),
+(167, 'eraser', 5.00, 90, NULL, NULL);
+
+
+8.1
+select p.pid, p.pname, p.cid, c.cname 
+from product p, category c
+where p.cid = c.cid and c.cid = (select cid from category where cname = 'chips'); 
+
+8.3
+
+
+select * from salesman
+where sid not in (select sid from product where sid is not null);
+
+
+8.4
+
+select * from category 
+where cid not in (select cid from product where cid is not null);
+
+8.5
+select pname from product
+where cid is null;
+
+
+8.6
+select * from salesman 
+where regexp_like(city, '^[PN]');
+
+8.7
+
+alter table salesman
+add column credit_limit int;
+
+8.9
+select * from dept 
+where deptno not in (select deptno from emp);
+
+
+
+--9
+
+
+---------------------------------rooom------------------------------------------
+CREATE TABLE room (
+    rid INT PRIMARY KEY,
+    rname VARCHAR(15) NOT NULL,
+    rloc VARCHAR(20)
+);
+
+INSERT INTO room VALUES
+(100, 'Jasmin', '1st floor'),
+(101, 'Rose', '2nd floor'),
+(105, 'Lotus', '1st floor'),
+(103, 'Mogra', '1st floor');
+
+
+---------------------------------faculty------------------------------------------
+
+
+CREATE TABLE faculty (
+    fid INT PRIMARY KEY,
+    fname VARCHAR(20) NOT NULL,
+    sp_skill1 VARCHAR(30),
+    sp_skill2 VARCHAR(30)
+);
+
+INSERT INTO faculty VALUES
+(10, 'Amol', 'Database', 'Java'),
+(11, 'Asha', 'Java', 'MySQL'),
+(12, 'Kiran', 'CPP', 'database'),
+(13, 'Seeta', 'MySQL', 'database');
+
+---------------------------------courses------------------------------------------
+
+CREATE TABLE courses (
+    cid INT PRIMARY KEY,
+    cname VARCHAR(15) NOT NULL,
+    rid INT,
+    fid INT,
+    FOREIGN KEY(rid) REFERENCES room(rid) ON DELETE SET NULL,
+    FOREIGN KEY(fid) REFERENCES faculty(fid) ON DELETE SET NULL
+);
+
+INSERT INTO courses VALUES
+(121, 'DBDA', 100, 10),
+(131, 'DAC', 101, NULL),
+(141, 'DTISS', NULL, NULL),
+(151, 'DOIT', 105, 12);
+
+
+9.1
+select rid  from room
+where rid not in (select rid from courses where rid is not null);
+
+9.2
+select * from room where rid in (select rid from courses) or rid is not null;
+
+9.3
+
+select * from courses
+where fid in (select fid from faculty where sp_skill1 = 'database' or sp_skill2 ='database' );
+
+9.4
+
+select * from faculty f, courses c, room r
+where f.fid = c.fid and c.rid = r.rid;
+
+
+--10
+4 data 
+
+select * from emp 
+where mgr = (select empno from emp where ename = 'Blake');
+
+
+--11
+select * from emp 
+where deptno = (select deptno from dept where loc = 'chicago') and job = 'salesman';
+
+
+--12 
+select * from emp 
+where sal < (select sal from emp where empno = 7689);
+
+--13
+select * from emp 
+where sal < (select avg(sal) from emp);
+
+
+--14
+select * from emp
+where mgr in (select empno from emp where empno in(7689, 7839));
+
+--15
+create table emp_data as select * from emp;
+
+
+insert into emp_data (empno, ename, deptno, sal, job) 
+values (9999, 'Amit', 80, null,'manager');
+
+
+
+select e.empno, e.deptno, d.dname, d.loc
+from emp_data e, dept d
+where e.deptno = d.deptno and e.deptno in (select deptno from dept);
+
+
+--16
+select e.empno, e.deptno, d.deptno, d.loc 
+from emp_data e, dept d
+where e.deptno not in (select deptno from dept where deptno is not null);
+
+select e.empno, e.deptno 
+from emp_data 
+where e.deptno not in (select deptno from dept where deptno is not null);
+
+
+--17
+select * from dept
+where deptno not in (select deptno from emp where deptno is not null);
+
+
+ 
+
+
+
+
+
+

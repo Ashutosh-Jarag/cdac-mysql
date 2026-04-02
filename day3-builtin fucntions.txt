@@ -1,0 +1,168 @@
+
+--1
+
+select hiredate from emp;
+
+select date_format(hiredate, '%d-%m-%y') from emp;
+
+select date_format(hiredate, '%d/%m/%y') from emp;
+
+--2
+
+select * from emp 
+where mod(sal, 3) = 0;
+
+select * from emp 
+where sal % 3 = 0;
+
+
+--3
+
+select concat(ename,'****',sal) AS details 
+FROM emp;
+
+
+--4 
+
+SELECT *, CONCAT(ename,'@mycompany.com') AS email
+from emp;
+
+--5 
+select ename ,length(ename) AS size
+from emp;
+
+
+--6
+SELECT *, CONCAT(SUBSTR(ename, 1, 3), '.', SUBSTR(job, 2, 3), '@mycompany.com') AS email
+FROM emp;
+
+
+--7
+select upper(ename), upper(job) from emp;
+
+SELECT 
+CONCAT(UPPER(SUBSTR(ename, 1, 1)), LOWER(SUBSTR(ename, 2))) AS name,
+CONCAT(UPPER(SUBSTR(job, 1, 1)), LOWER(SUBSTR(job, 2))) AS job
+FROM emp;
+
+SELECT 
+concat(
+CONCAT(UPPER(SUBSTR(ename, 1, 1)), LOWER(SUBSTR(ename, 2))),  ' +++++ ',
+CONCAT(UPPER(SUBSTR(job, 1, 1)), LOWER(SUBSTR(job, 2)))
+) as name+++job  
+FROM emp;
+
+select ename,job,
+concat(
+	UPPER(SUBSTR(ename, 1, 1)),
+	LOWER(SUBSTR(ename, 2)),
+	UPPER(SUBSTR(job, 1, 1)), 
+	LOWER(SUBSTR(job, 2))
+) as namejob
+ from emp;
+
+	
+
+--8
+SELECT CONCAT(LOWER(SUBSTR(ename, 1, 3)), UPPER(SUBSTR(ename, 4))) AS name
+FROM emp;
+
+--9
+SELECT *, CONCAT(LOWER(SUBSTR(ename, 1, 3)), LOWER(SUBSTR(job, 4)), '@knowit.com') AS email
+FROM emp;
+
+--10
+SELECT *, TIMESTAMPDIFF(YEAR, hiredate, NOW()) AS experience
+FROM emp
+WHERE TIMESTAMPDIFF(YEAR, hiredate, NOW()) > 40;
+
+
+--11
+CREATE TABLE newemp AS
+SELECT * FROM emp;
+
+UPDATE newemp
+SET sal = sal * 1.1
+WHERE TIMESTAMPDIFF(YEAR, hiredate, NOW()) > 40;
+
+select *, TIMESTAMPDIFF(YEAR, hiredate, NOW()) AS experience
+from newemp;
+
+--12
+SELECT *, 
+    CASE 
+        WHEN comm is null THEN 'Must work harder'
+        WHEN comm >= 100 AND comm <= 1000 THEN 'GOOD'
+        WHEN comm < 500 THEN 'OK'
+        ELSE 'Invalid'
+    END AS Remarks
+FROM emp;
+
+--13
+
+select * from emp
+where sal between 1000 and 3000;
+
+select * from emp 
+where sal <=1000 and sal>=3000;
+
+
+--14
+select lpad(ename,10,'*'), rpad(job,9,'#')
+from emp;
+
+--15
+select 
+CONCAT("Hello"," ",upper(substr(ename,1,1)),lower(substr(ename,2)),"!") 
+from emp;
+
+
+--16
+select 
+CONCAT("Hello"," ",upper(substr(ename,1,1)),lower(substr(ename,2))) 
+from emp;
+
+--17
+select 
+CONCAT(upper(ename)," is a ",lower(job)) 
+from emp;
+
+--18
+SELECT CONCAT(empno,',',ename,',',job,',',mgr,',',hiredate,',',sal,',',comm,',',deptno) AS emp_details
+FROM emp;
+
+
+SELECT CONCAT_WS(',', empno, ename, job, mgr, hiredate, sal, comm, deptno) AS emp_details
+FROM emp;
+
+
+--19 
+SELECT DISTINCT hiredate
+FROM emp
+WHERE DAYNAME(hiredate) = 'Monday';
+
+--20
+select date_format(current_date(), '%d %M %Y') AS sample_date; 
+
+
+--21
+select * from emp
+where job in('clerk','manager') and deptno in (10,20) and sal >2000;
+
+select * from emp
+where job = 'clerk'and job ='manager' and deptno in (10,20) and sal >2000;
+
+
+--22
+select * from emp
+where job in('clerk','ANALYST') and deptno in (30,20) and sal >1000;
+
+--23
+select * from emp
+where hiredate >= '1982-01-01' and deptno in (10,30);
+
+select * from emp
+where year(hiredate) >= '1982' and deptno in (10,30);
+
+--24
+select floor(datediff(current_date(),'2003-08-09')/365) 'age';

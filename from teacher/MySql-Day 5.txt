@@ -1,0 +1,276 @@
+over()
+select ename,max(sal) 
+from emp;
+
+select ename,sal,max(sal)over()
+from emp;
+
+select ename,sal,max(sal)over(),min(sal)over(),avg(sal)over()
+from emp;
+
+select ename,sal,deptno,max(sal)over(partition by deptno)
+from emp;
+
+select ename,sal,deptno,job,max(sal)over(partition by deptno) "max sal dept",
+avg(sal)over(partition by job) "avg sal per job"
+from emp;
+
+select max(sal),avg(sal)
+from emp
+group by detno;
+
+list ename,sal,job,min sal for dept 10
+select ename,sal,job,min(sal)over(partition by deptno)
+from emp
+where deptno=10;
+
+select ename,sal,job,deptno,min(sal)over(partition by deptno order by deptno) 
+from emp;
+ 
+select ename,sal,job,deptno,min(sal)over(order by deptno) 
+from emp;// logically incorrect
+
+select ename,sal,job,deptno,min(sal)over() 
+from emp
+order by deptno;
+================================
+list all emps working in smith's dept
+
+select *
+from emp
+where deptno=(select deptno
+              from emp
+              where ename='smith');
+
++-------+-------+---------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB     | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+---------+------+------------+---------+------+--------+
+|  7369 | SMITH | CLERK   | 7902 | 1980-12-17 |  800.00 | NULL |     20 |
+|  7566 | JONES | MANAGER | 7839 | 1981-04-02 | 2975.00 | NULL |     20 |
+|  7788 | SCOTT | ANALYST | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
+|  7876 | ADAMS | CLERK   | 7788 | 1983-01-12 | 1100.00 | NULL |     20 |
+|  7902 | FORD  | ANALYST | 7566 | 1981-12-03 | 3000.00 | NULL |     20 |
++-------+-------+---------+------+------------+---------+------+--------+
+
+all emps earning sal more than jones or adams
+
+select *
+from emp
+where sal>any(select sal
+              from emp
+              where ename in('jones','adams'));
+
+select *
+from emp
+where sal>all(select sal
+              from emp
+              where ename in('jones','adams'));
+
+IN operator
+----------
+list depts where emps are working
+
+select *
+from dept 
+where deptno in (select deptno
+                 from emp);
+
+not in
+----------------
+select *
+from dept 
+where deptno not in (select deptno
+                 from emp
+                 where deptno is not null);
+
+
+insert into emp(empno,ename)
+values(1111,'Amit');
+
+insert into emp(empno,ename,deptno)
+values(2222,'Amol',80);
+
+
+list all emp to whome correct deptno is not assigned
+
+select *
+from emp
+where deptno not in(select deptno
+                    from dept)
+or deptno is null; // handling null if any int emp table
+
+finding second highest value
+=======================
+select max(sal)
+from emp
+where sal<(select max(sal)
+           from emp);
+
+finding duplicate values
+=========================
+select sal
+from emp
+group by sal
+having count(*)>1;
+
+select job
+from emp
+group by job
+having count(*)>1;
+
+ select job
+from emp
+group by job
+having count(*)=1;
+
+year in which only 1 emp was hired
+==============================
+select year(hiredate)
+from emp
+group by year(hiredate)
+having count(*)=1;
+
++----------------+
+| year(hiredate) |
++----------------+
+|           1980 |
+|           1983 |
++----------------+
+========================
+subquer for delete
+
+delet all emps working in dept where allen works
+
+delete 
+from emp_new
+where deptno=(select deptno
+               from emp_new
+              where ename='allen'); //cannot perform r/w operations on same table
+
+delete
+from emp_new
+where deptno=(select deptno
+              from (select deptno
+                    from emp_new
+                    where ename='allen')a
+              );
+
+subquery for update
+===================
+change deptno of Ford as that of Miller
+
+update emp_new
+set deptno=(select deptno 
+            from emp_new 
+            where ename='miller')
+where ename='ford';
+ERROR 1093 (HY000): You can't specify target table 'emp_new' for update in FROM clause
+
+update emp_new
+set deptno=(select deptno
+            from(select deptno 
+                 from emp_new 
+                 where ename='miller')tab
+            )
+where ename='ford';
+
+========================
+subquery for create
+
+create table tmp
+as
+  select * from dept
+  where 1=2;
+
+==========================
+subquery for insert
+
+insert into tmp
+(
+   select *
+   from dept 
+);
+============================
+correlated subquery
+
+-find emps earning sal more thAN THE avg sal of their dept
+
+select *
+from emp e1
+where e1.sal > (select avg(e2.sal)
+                from emp e2
+                where e1.deptno=e2.deptno);
+
+-finding 3rd highest value in the table  // n-1 hence 2
+select *
+from emp e1
+where 2=(select count(distinct e2.sal)
+         from emp e2
+         where e2.sal>e1.sal);
+
+--finding 5th lowest value in the table  // n-1 hence 2
+select *
+from emp e1
+where 4=(select count(distinct e2.sal)
+         from emp e2
+         where e2.sal<e1.sal);
+
+exist/not exist
+==================
+list depts where emps are working
+
+select *
+from dept 
+where deptno in (select deptno
+                 from emp);
+
+exist
+-----
+select *
+from dept d1
+where exists(select deptno
+             from emp e1
+             where e1.deptno=d1.deptno);
+
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
++--------+------------+----------+
+
+select *
+from dept d1
+where not exists(select deptno
+             from emp e1
+             where e1.deptno=d1.deptno);
+
+
++--------+------------+--------+
+| DEPTNO | DNAME      | LOC    |
++--------+------------+--------+
+|     40 | OPERATIONS | BOSTON |
++--------+------------+--------+
+
+insert into emp(empno,ename)
+values(1111,'Amit');
+
+insert into emp(empno,ename,deptno)
+values(2222,'Amol',80);
+
+
+select *
+from dept 
+where deptno not in(select deptno
+                 from emp
+                  where deptno is not null );
+ 
+
+select *
+from dept 
+where not exists(select deptno
+                 from emp
+                 where emp.deptno=dept.deptno );
+ 
+

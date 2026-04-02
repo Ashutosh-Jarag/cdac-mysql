@@ -1,0 +1,133 @@
+--1
+
+select sum(sal) as sum_sal 
+from emp
+group by deptno;
+
+
+--2
+select deptno,sum(sal) 
+from emp
+group by deptno
+having sum(sal) > 10000;
+
+--3
+SELECT job, SUM(sal) AS total_salary
+FROM emp
+WHERE deptno != 30
+GROUP BY job
+HAVING SUM(sal) > 5000;
+
+
+--4
+select job, max(sal) as salary
+from emp
+where job = 'manager' #or job = 'clerk' or job = 'salesman' and (deptno = 10 or deptno= 20)
+group by job
+order by max(sal) desc;
+
+
+select job, max(sal) as salary
+from emp
+where job in ('manager','clerk','salesman') and  deptno in(10,20)
+group by job
+order by max(sal) desc;
+
+
+--5
+select job, avg(sal), count(empno)
+from emp
+group by job;
+
+
+--6
+select deptno,count(deptno) as emp_count
+from emp
+group by deptno 
+having count(deptno) >=4;
+
+
+--7
+select job, sum(sal), min(sal)
+from emp
+where job = 'manager'
+group by job;
+
+
+--8
+select deptno, sum(sal) as sum, COUNT(*) as count
+from emp 
+where job = 'clerk'
+group by deptno
+having count(*)>=1;
+
+--9 
+select deptno, count(*) as count
+from emp
+where sal > 1500
+group by deptno;
+
+
+--10
+select deptno,count(*)
+from emp
+where job = 'analyst' 
+group by deptno;
+
+
+--11
+select count(*) from emp
+where comm is not null and comm >0;
+
+
+--12
+select min(sal)
+from emp
+where year(hiredate) = 1981;
+
+
+--13
+select avg(sal)
+from emp
+WHERE TIMESTAMPDIFF(YEAR, hiredate, NOW()) > 44;
+
+--14
+select count(*)
+from emp
+where job = 'clerk' and deptno in (10,20);
+
+
+--15
+select count(*) 
+from emp
+where job = 'salesman' and sal >1500;
+
+
+--16
+select count(*)  from emp
+where month(hiredate) = 2;
+
+
+--17
+select year(hiredate), count(hiredate)
+from emp
+group by year(hiredate)
+having count(hiredate)>4;
+
+
+--18
+select empno, job, hiredate, sal, deptno
+from emp
+where job = 'clerk' and month(hiredate) = 12 and deptno in (30,20);
+
+
+--19
+select job, sal
+from emp
+where job = 'manager' and sal % 2 = 0;
+
+--20
+select year(hiredate), count(*)
+from emp
+group by year(hiredate);
+

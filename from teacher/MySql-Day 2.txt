@@ -1,0 +1,196 @@
+in operator
+
+select * 
+from emp
+where job ='manager' or job='salesman';
+
+select * 
+from emp
+where job in ('manager','salesman');
+
+
+data sorting
+----------------
+select * 
+from emp
+order by sal;
+
+select * 
+from emp
+order by sal desc;
+
+select ename,job,sal
+from emp
+order by job,sal desc ;
+
+update emp_new
+set sal=10000,job='sr.mgr'
+where ename='martin';
+
+
+limit
+
+select * 
+from emp
+limit 5 offset 3;
+
+
+case statement
+-----------------
+select ename,sal,comm,case
+                      when comm>100 and comm<1000
+                      then "Can do better"
+                      when comm>=1000 then "good perf"
+                      when comm is null then "work hard"
+                  else "comm not entered"
+             end "Remarks"
+from emp;
+ 
+Multiple table handling
+=======================
+
+emp,dept
+
+select e.ename,e.deptno,d.deptno,d.dname
+from emp e, dept d 
+where e.deptno=d.deptno;   
+
+emp,dept,salgrade
+select e.ename,e.deptno,d.deptno,d.dname,e.sal,s.grade
+from emp e, dept d, salgrade s
+where e.deptno=d.deptno and (e.sal between s.losal and s.hisal);   
+
+   
+
+set operators
+============
+
+create table t1
+(no int,
+ city varchar(15));
+
+insert into t1
+values(1,'Pune'),
+      (2,'Nashik'),
+      (3,'Mumbai'),
+      (4,'Nagpur'),
+       (5,'Goa');
+
+ create table t2
+(no int,
+ city varchar(15));
+
+insert into t2
+values(11,'Pune'),
+      (2,'Chennai'),
+      (3,'Mumbai'),
+      (14,'Jalgaon'),
+       (15,'Manali');
+
+select * 
+from t1
+union 
+select *
+from t2;
+
+select * 
+from t1
+intersect
+select *
+from t2;
+
+select * 
+from t2
+except
+select *
+from t1;
+
+like operator
+================          
+select *
+from emp
+where ename='A%';      
+
+select *
+from emp
+where ename like '____';  
+
+select *
+from emp
+where ename like 'A%' or ename like 'F%';    
+
+regular expressions
+===================
+
+select * 
+from emp
+where REGEXP_LIKE(column_name,'pattern');
+
+^ : first letter
+$ : last letter
+. : single letter
+.* : multiple letters
+[0-9] : digits \d
+[a-z]:letters
+
+-list all emp starting with letter A
+select * 
+from emp
+where REGEXP_LIKE(ename,'^A');
+
+-list all emp where  letter N comes in between
+select * 
+from emp
+where REGEXP_LIKE(ename,'.*N.*');
+
+-list all emp where  letter N at the end
+select * 
+from emp
+where REGEXP_LIKE(ename,'.*N$');
+
+-list all emp strting with MSA  
+select * 
+from emp
+where REGEXP_LIKE(ename,'^[MSA].*');
+
+-not starting with A
+select * 
+from emp
+where REGEXP_LIKE(ename,'^[^A].*');
+
+-name starts with A and ends with n
+select * 
+from emp
+where REGEXP_LIKE(ename,'^A.*N$');
+
+-name starts with A and ends with n or starts with m and ends with n or
+starts with s and ends with h
+select * 
+from emp
+where REGEXP_LIKE(ename,'^A.*N$|^m.*n$|^s.*h$');
+
+8 characters
+Select *
+From dept
+Where REGEXP_like(dname,'^.{8}');
+
+
+
+    
+      
+
+
+
+
+    
+      
+
+
+   
+
+
+
+
+        
+
+

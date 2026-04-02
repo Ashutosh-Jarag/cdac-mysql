@@ -1,0 +1,35 @@
+------while loop 
+
+DELIMITER //
+CREATE PROCEDURE while_loop()
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    
+    WHILE i <= 5 DO
+        SELECT i AS number;
+        SET i = i + 1;
+    END WHILE;
+    
+END //
+DELIMITER ;
+
+CALL while_loop();
+
+
+
+------until repeat 
+
+DELIMITER //
+CREATE PROCEDURE repeat_until()
+BEGIN 
+	DECLARE i INT DEFAULT 1;
+	
+	REPEAT 
+		SELECT i AS number;
+		SET i = i+1;
+	UNTIL i>5
+	END REPEAT;
+END // 
+DELIMITER ; 
+
+CALL repeat_until();

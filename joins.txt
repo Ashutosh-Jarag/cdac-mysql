@@ -1,0 +1,163 @@
+
+--1
+
+select r.rid, r.rname, c.cid, c.cname
+from room r
+left join courses c
+on r.rid = c.rid;
+
+--2
+select p.pname, s.sid, s.sname
+from product p
+left join salesman s
+on p.sid = s.sid
+where s.sname = 'kirti';
+
+
+--3
+
+select e.empno, e.ename, e.sal, d.deptno, e.sal
+from emp e
+join dept d
+on e.deptno = d.deptno
+join salgrade s
+on e.sal between s.losal and s.hisal
+where s.grade = 2;
+
+
+--4
+select e.empno, e.ename, e.deptno, d.dname, e.hiredate, d.loc
+from emp e
+left join dept d
+on e.deptno = d.deptno
+where e.job = 'manager' and year(e.hiredate) = '1981';
+
+
+--5 
+select d.deptno, d.dname, d.loc
+from emp e
+right join dept d
+on e.deptno = d.deptno;
+
+--6 
+select e.empno, e.ename, e.mgr, a.ename, a.mgr 
+from emp e
+join emp a
+where e.mgr = a.empno;
+
+--7
+create table product_table
+(
+	pid int primary key auto_increment,
+	pname varchar(20),
+	sid int 
+);
+
+
+insert into product_table (pname, sid) 
+values 
+('pen', 2),
+('pencil',3),
+('earser',2),
+('sketch pens',1);
+
+select p.pid, p.pname, a.sid, a.pname
+from product_table p
+join product_table a
+where p.sid = a.pid;
+
+--8
+select p.pid, p.pname, p.qty, p.price, s.sid, s.sname, s.city
+from product p
+join salesman s
+on p.sid = s.sid
+where p.price > 50;
+
+
+--9
+select p.pid, p.pname, p.cid, c.cname
+from product p
+left join category c
+on p.cid = c.cid
+where c.cname = 'chips'; 
+
+--10
+select e.empno, e.ename, e.deptno, d.dname, e.sal, s.grade, e.hiredate
+from emp e
+join dept d
+on e.deptno = d.deptno
+join salgrade s
+on e.sal between s.losal and s.hisal
+where year(e.hiredate) = 1981 or year(e.hiredate) = 1980
+order by e.hiredate;
+
+--11
+create table increment
+(
+	grade int primary key auto_increment,
+	hike int
+);
+
+insert into increment(hike)
+values
+(10),
+(7),
+(5),
+(2),
+(null);
+
+select e.empno, e.ename, d.deptno,d.dname, e.sal, s.grade,i.hike
+from emp e
+left join dept d
+on e.deptno = d.deptno
+left join salgrade s
+on e.sal between s.losal and s.hisal
+left join increment i
+on s.grade = i.grade;
+
+
+--12
+
+select 
+ 
+
+
+--12
+select e.empno, e.ename, e.job, e.mgr, a.ename, a.mgr 
+from emp e
+join emp a
+where e.mgr = a.empno and e.job = 'salesman';
+
+--13
+select e.empno, e.ename, e.deptno, d.dname, e.hiredate, d.loc
+from emp e
+left join dept d
+on e.deptno = d.deptno
+where d.loc = 'dallas' and year(e.hiredate) = '1980';
+
+
+--13
+select e.empno, e.ename, e.deptno, d.dname, e.hiredate, d.loc
+from emp e
+left join dept d
+on e.deptno = d.deptno
+where year(e.hiredate)='1980' and d.loc in (select loc from dept where loc  = 'dallas');
+
+--14
+select e.ename, e.sal, e.deptno, d.dname
+from emp e 
+join dept d
+where e.deptno = d.deptno and sal > (select avg(sal) from emp);
+
+--15
+
+select e.empno, e.ename, e.sal, d.deptno, e.sal
+from emp e
+join dept d
+on e.deptno = d.deptno
+join salgrade s
+on e.sal between s.losal and s.hisal
+where s.grade = 3;
+
+
+

@@ -1,0 +1,212 @@
+--1
+create table product(
+	pid int primary key ,
+	pname varchar(40),
+	price int , 
+	qty int	
+);
+
+create table product_details
+(
+	pid int,
+	amt int
+);
+
+
+
+create table log
+(
+	pid int, 
+	pname varchar(40),
+	action varchar(40),
+	action_date date
+);
+
+-------trigger
+DELIMITER //
+CREATE TRIGGER tr_amt
+AFTER UPDATE ON product
+FOR EACH ROW
+BEGIN
+    IF OLD.price != NEW.price THEN
+        -- Update amount in product_details
+        UPDATE product_details
+        SET amt = NEW.price * NEW.qty
+        WHERE pid = NEW.pid;
+        
+        -- Log the action
+        INSERT INTO log(pid, pname, action, action_date)
+        VALUES(OLD.pid, OLD.pname, 'PRICE UPDATED', NOW());
+    END IF;
+END //
+DELIMITER ; 
+
+INSERT INTO product VALUES(1, 'Laptop', 50000, 10);
+
+INSERT INTO product_details VALUES(1, 500000);
+
+
+UPDATE product SET price = 60000 WHERE pid = 1;
+
+SELECT * FROM product_details;
+
+SELECT * FROM log;
+
+
+
+--2 
+
+create table if not exists emp_wage
+(
+	eno int primary key auto_increment,
+	ename varchar(40),
+	sal int, 
+	over_time int
+);
+
+
+DELIMITER //
+CREATE TRIGGER emp_wage_trg
+BEFORE INSERT ON emp_wage
+FOR EACH ROW
+BEGIN
+	IF new.over_time is null then 
+		set new.over_time = 400;
+	END IF ;
+	
+END //
+DELIMITER ; 
+
+
+INSERT INTO emp_wage(ename, sal, over_time) values('sdasd', 5000, NUll);
+
+
+
+
+
+--3
+
+create table order_master
+(
+	oid int primary key auto_increment, 
+	pname varchar(50), 
+	qty int, 
+	price int
+);	
+	
+	
+create table order_log
+( 
+	oid int,
+	odate date,
+	amt int
+
+);
+	
+DELIMITER //
+CREATE TRIGGER order_log_trg
+AFTER INSERT ON order_master
+FOR EACH ROW
+BEGIN
+    INSERT INTO order_log(oid, odate, amt)
+    VALUES(NEW.oid, NOW(), NEW.price * NEW.qty);
+END //
+DELIMITER ;
+
+INSERT INTO order_master(pname, qty, price)
+VALUES('Laptop', 2, 50000);
+
+
+SELECT * FROM order_master;
+
+SELECT * FROM order_log;
+
+
+
+--4
+CREATE TABLE new_emp(
+    eno INT PRIMARY KEY AUTO_INCREMENT,
+    ename VARCHAR(40),
+    job VARCHAR(40),
+    sal INT
+);
+
+CREATE TABLE emp_log(
+    eno INT,
+    ename VARCHAR(40),
+    job VARCHAR(40),
+    osal INT,
+    nsal INT
+);
+
+INSERT INTO new_emp(ename, job, sal) VALUES
+('Akshay', 'Developer', 30000),
+('Anika', 'Analyst', 50000),
+('Radhika', 'Manager', 65000);
+
+
+DELIMITER //
+CREATE TRIGGER emp_trg
+AFTER UPDATE ON new_emp
+FOR EACH ROW
+BEGIN
+    IF OLD.sal != NEW.sal THEN
+        INSERT INTO emp_log(eno, ename, job, osal, nsal)
+        VALUES(old.eno, old.ename, old.job, old.sal, new.sal);
+    END IF;
+END //
+DELIMITER ; 
+
+
+update new_emp
+set sal = 20000
+where eno = 1;
+
+select * from new_emp;
+
+select * from emp_log;
+
+
+
+--5 
+CREATE TABLE medicine_master(
+    mno INT PRIMARY KEY AUTO_INCREMENT,
+    mname VARCHAR(20),
+    stock INT
+);
+
+CREATE TABLE medicine_order(
+    mid INT PRIMARY KEY AUTO_INCREMENT,
+    mno INT,
+    qty INT
+);
+
+INSERT INTO medicine_master(mname, stock) VALUES
+('crocine', 20),
+('Calpol', 30),
+('Gelusil', 30);
+
+
+DELIMITER //
+CREATE TRIGGER medi_trg
+AFTER UPDATE ON medicine_master
+FOR EACH ROW
+BEGIN
+	IF new.stock < 15 then 
+		INSERT into medicine_order(mno, qty) values(new.mno, 15);
+	END IF;	
+END //
+DELIMITER ; 
+
+update medicine_master
+set stock = 10
+where mno = 1; 
+
+
+select * from medicine_master;
+
+select * from medicine_order;
+
+update medicine_master
+set stock = 35
+where mno = 3; 

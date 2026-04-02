@@ -1,0 +1,97 @@
+
+--2
+ select * from emp where sal>2000 AND comm>200;
+
+mysql>  select * from emp where sal>2000 AND comm>200;
+Empty set (0.00 sec)
+
+--3
+select * from emp where job = 'clerk' or sal > 2000;
+
+mysql> select * from emp where job = 'clerk' or sal > 2000;
++-------+--------+-----------+------+------------+---------+------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+--------+-----------+------+------------+---------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 | NULL |     20 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 | NULL |     20 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 | NULL |     10 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 | NULL |     10 |
++-------+--------+-----------+------+------------+---------+------+--------+ 
+
+--4 
+select * from emp where sal = 1250 or sal = 1100;
+
+--5 
+select * from emp where sal>1250 and sal <2850;
+
+--6 
+select ename, sal, deptno from emp where deptno = 20;
+
+-- 7 
+select * from emp where hiredate > 1981-06-09;
+
+--8 
+select empno, ename, sal, comm, comm+sal AS total_salary from emp;
+
+--9 
+select empno, ename, deptno from emp;
+
+--10
+select ename, deptno from emp where ename = 'Smith';
+
+--11
+select * from emp where sal >2000 or job = 'clerk' or job = 'salesman';
+
+--12
+select * from emp where deptno =20 or deptno =30 and comm is null;
+
+--13
+SELECT * FROM emp WHERE deptno = 20 OR deptno = 30 OR hiredate BETWEEN '1981-01-01' AND '1983-01-01';
+
+--14 
+select * from emp where mgr is null;
+
+--15
+SELECT * FROM emp WHERE hiredate BETWEEN '1981-01-01' AND '1983-12-31';
+
+--16
+CREATE TABLE emp10(
+	EMPNO INT NOT NULL,
+        ENAME varchar(10),
+        JOB varchar(9),
+        MGR INT ,
+        HIREDATE DATE,
+        SAL DECIMAL(7, 2),
+        COMM DECIMAL(7, 2),
+        DEPTNO INT(2));
+
+describe emp10;
+
+create table emp10 as select * from emp;
+
+
+--17
+INSERT INTO emp10 (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) 
+VALUES
+(101, 'Rajesh', 'MANAGER', NULL, '1982-06-15', 5000.00, 500.00, 10);
+
+--19
+select * from emp where mgr = 7698;
+
+--20
+select ename, mgr from emp where deptno = 10;
+
+--21 
+select DISTINCT job from emp;
+
+--22
+select DISTINCT deptno from emp;
+
+
+

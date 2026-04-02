@@ -1,0 +1,183 @@
+create table test
+(
+  no int auto_increment,
+  city varchar(15),
+  constraint pk_no primary key(no)
+);
+
+insert into test(city)
+values('Pune'),
+('Mumbai'),('Nagpur');
+
+insert into test(city)
+values('Patna')
+insert into test(city)
+values('Kanpur');
+
+insert into test(no,city)
+values(2,'Bhopal');
+===========================
+create table cat1
+(
+  cat_id int,
+  cname varchar(15) unique not null,
+  constraint pk_catid primary key(cat_id)
+);
+
+insert into cat1
+values(10,'Food');
+insert into cat1
+values(20,'Clothes');
+insert into cat1
+values(30,'Stationary');
+
+create table product1
+(pid int,
+ pname varchar(30) not null,
+ cid int,
+ constraint pk_pid primary key(pid),
+ constraint fk_cid1 foreign key(cid) references cat1(cat_id) 
+ on delete set null
+);
+
+insert into product1
+values(1,'Pen',30);
+insert into product1
+values(2,'Dairy Milk',10);
+insert into product1
+values(3,'Pencil',30);
+insert into product1
+values(4,'TShirt',20);
+insert into product1
+values(5,'Crayons',30);
+insert into product1
+values(6,'Crayons',30);
+
+create table product1
+(pid int,
+ pname varchar(30) not null,
+ cid int,
+ constraint pk_pid primary key(pid),
+ constraint fk_cid1 foreign key(cid) references cat1(cat_id) 
+ on delete cascade
+); 
+
+delete from product1 where pid=1;
+====================================
+create table product1
+(pid int,
+ pname varchar(30) not null,
+ cid int,
+ constraint pk_pid primary key(pid),
+ constraint fk_cid1 foreign key(cid) references cat1(cat_id) 
+ on update set null
+);
+
+insert into product1
+values(1,'Pen',30);
+insert into product1
+values(2,'Dairy Milk',10);
+insert into product1
+values(3,'Pencil',30);
+insert into product1
+values(4,'TShirt',20);
+insert into product1
+values(5,'Crayons',30);
+insert into product1
+values(6,'Crayons',30);
+
+create table product1
+(pid int,
+ pname varchar(30) not null,
+ cid int,
+ constraint pk_pid primary key(pid),
+ constraint fk_cid1 foreign key(cid) references cat1(cat_id) 
+ on update cascade
+);
+
+update cat1 set cat_id=300 where cat_id=30;
+
+=============================================
+autocommit=1 by default in mysql
+
+set autocommit=0;
+
+savepoint A;
+insert into test(city) values('qqqq');
+insert into test(city) values('rrrr');
+savepoint B;
+alter statement
+insert into test(city) values('ssss');
+insert into test(city) values('tttt');
+savepoint C;
+insert into test(city) values('uuuu');
+insert into test(city) values('vvvv');
+insert into test(city) values('wwww');
+insert into test(city) values('xxxx');
+
+rollback to A
+
+==============================
+grouping data
+
+select sum(sal)
+from emp;
+
+select sum(comm)
+from emp;
+
+select count(*)
+from emp;
+
+select count(comm)
+from emp;
+
+select max(sal),ename
+from emp;
+
+select job, max(sal)"Maximum Salary"
+from emp
+where job='salesman';
+
+select job, max(sal)"Maximum Salary"
+from emp
+group by job; 
+
++-----------+----------------+
+| job       | Maximum Salary |
++-----------+----------------+
+| CLERK     |        1300.00 |
+| SALESMAN  |        1600.00 |
+| MANAGER   |        2975.00 |
+| ANALYST   |        3000.00 |
+| PRESIDENT |        5000.00 |
++-----------+----------------+
+5 rows in set (0.00 sec)
+
+select job, max(sal)"Maximum Salary"
+from emp
+group by job
+having max(sal)>2000
+order by job; 
+
+select job, max(sal)"Maximum Salary"
+from emp
+group by job
+having max(sal)>2000
+order by max(sal) desc;
+
++-----------+----------------+
+| job       | Maximum Salary |
++-----------+----------------+
+| PRESIDENT |        5000.00 |
+| ANALYST   |        3000.00 |
+| MANAGER   |        2975.00 |
++-----------+----------------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+
+

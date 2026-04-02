@@ -1,0 +1,5 @@
+--1 
+
+select empno, ename, deptno, sal, avg(sal), min(sal), max(sal)
+from emp
+group by sal;

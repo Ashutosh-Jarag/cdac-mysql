@@ -1,0 +1,17 @@
+--1
+
+describe emp;
+
+show index from emp;
+
+
+--2
+create index idx1
+ON emp(deptno);
+
+
+--3
+drop index idx1 on emp;
+
+alter table emp
+drop index idx;

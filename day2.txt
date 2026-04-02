@@ -1,0 +1,62 @@
+--13 
+delete from customer where l 
+
+
+
+--
+select e.ename, e.deptno, d.dname
+from emp e, dept d;
+
+
+
+--15
+update vehicle
+set price = 80000
+where price = 75000;
+
+--19
+update emp
+set job = 'H Clerk' , sal = 60000
+where ename = 'Adams';
+
+
+--17 
+update employee
+set incentive = 1000
+where ename = 'jitesh';
+
+--18
+delete from employee 
+where ename = 'Meera';
+
+
+
+--------------anotehre one 
+--20
+select e.ename, e.deptno, d.dname
+from emp e, dept d
+where ename = "Smith";
+
+--21
+CREATE TABLE customer1 AS SELECT * FROM customer WHERE 1=0;
+CREATE TABLE customer2 AS SELECT * FROM customer WHERE 1=0;
+
+--22
+SELECT *, 
+    CASE 
+        WHEN comm = 0 THEN 'Must work harder'
+        WHEN comm >= 100 AND comm <= 1000 THEN 'Can do better'
+        WHEN comm > 1000 THEN 'Good'
+        ELSE 'Invalid'
+    END AS Remarks
+FROM emp;
+
+SELECT *, 
+    CASE 
+        WHEN comm = 0 THEN 'Must work harder'
+        WHEN comm >= 100 AND comm <= 1000 THEN 'Can do better'
+        WHEN comm > 1000 THEN 'Good'
+        ELSE 'Invalid'
+    END AS Remarks
+FROM emp
+where comm is not null;

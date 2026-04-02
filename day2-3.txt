@@ -1,0 +1,168 @@
+---1 
+
+select * from emp 
+where ename like '%R';
+
+select * from emp
+where regexp_like(ename, 'R$');
+
+
+--2 
+select * from emp 
+where regexp_like(ename, '^[MA].*[RE]$');
+
+
+select* FROM emp
+where (ename like 'M%R' OR ename like 'M%E'
+OR ename like 'A%R' OR ename like 'A%E');
+
+--3
+select* FROM emp
+where ename like 'M%R';
+
+--4
+
+
+--5
+select * from emp 
+where ename like '_L%';
+
+select * from emp 
+where regexp_like(ename, '^.L.*');
+
+--6
+select * from emp 
+where ename like '__L%';
+
+select * from emp 
+where regexp_like(ename, '^..L.*');
+
+--7
+
+select * from emp 
+where ename like '%ES';
+
+
+--8 
+select * from emp 
+where (ename like 'A%E' OR ename like 'M%E'); 
+
+--9
+select * from emp 
+where job like 'c%k';
+
+
+--10
+select* FROM emp
+where (ename like 'A%N' OR ename like 'S%H');
+
+--11
+SELECT * FROM emp
+where (ename like 'M%' and ename like '__L%' and ename like '%R'); 
+
+
+--12
+
+select * from emp
+where (ename like '__L%' and ename like '%E_');
+
+--13
+
+select * from emp
+where (ename not like 'A%' and ename not like 'M%'); 
+
+
+select * from emp
+where regexp_like(ename, '^[^A, ^M]');
+
+
+-- 14
+
+select * from emp 
+where (sal >1000 and sal < 3000 and ename like 'A%' and ename like '%T');
+
+
+-- 15 
+select empno, ename, sal, comm, sal+(sal*10/100) as in_sal
+from emp
+where regexp_like(ename, '^[AMS]');
+
+
+--16
+select * from emp 
+where regexp_like(ename, '^A.*[NS]$') and deptno = 10;
+
+
+--17
+select * from emp 
+where ename like '________%';
+
+select * from emp
+where regexp_like(ename, '^.{8,}$');
+
+select * from emp
+where regexp_like(ename, '[A-Z]{8}');
+
+
+-- 18
+
+select * from emp
+where ename like '%E_';
+
+
+--19
+
+select * from emp
+where (ename like 'A%S' OR ename like '_N%' or ename like '__N%') and regexp_like(ename,'[NS]$');
+
+
+--20
+
+select * from emp
+where (ename like 'A%' OR ename like '%S') AND deptno = 20;
+
+select * from emp
+where ename like 'A%' OR ename like '%S' AND deptno = 20;
+                                                                                                                                                                                                                                                                                                                                                --22
+select * from emp 
+where job like '__L%' and job like '%M__';
+
+select * from emp 
+where (job like '__L%') and (job like '%M__');
+
+
+--23 
+select * from emp
+where comm is null and ename like 'A%';
+
+--24
+select * from emp
+where (sal NOT between 2000 and 3000)
+and 
+job like '%MAN'; 
+
+
+--25
+select * from emp 
+where (ename not like '%s') and (deptno =20 or deptno = 30);
+
+--26 
+
+select * from emp
+where ename like '%ER';
+
+
+--27
+SELECT * FROM emp
+where ename like 'S%' and comm is null;
+
+
+--28
+select * from 
+
+
+--29
+select * from emp 
+where comm is null;
+
+

@@ -1,0 +1,194 @@
+cat(cat_id,cname)    base table
+    -------
+      pk
+product(pid,pname,cid) dependent table
+        ---       ---
+         pk       fk
+
+create table cat
+(
+  cat_id int,
+  cname varchar(15) unique not null,
+  constraint pk_catid primary key(cat_id)
+);
+
+insert into cat
+values(10,'Food');
+insert into cat
+values(20,'Clothes');
+insert into cat
+values(30,'Stationary');
+
+create table product
+(pid int,
+ pname varchar(30) not null,
+ cid int,
+ constraint pk_pid primary key(pid),
+ constraint fk_cid foreign key(cid) references cat(cat_id) 
+);
+
+insert into product
+values(1,'Pen',30);
+insert into product
+values(2,'Dairy Milk',10);
+insert into product
+values(3,'Pencil',30);
+insert into product
+values(4,'TShirt',20);
+insert into product
+values(5,'Crayons',30);
+insert into product
+values(6,'Crayons',null);
+ 
+delete
+from cat
+where cat_id=10;
+
+update cat
+set cat_id=100
+where cat_id=10;
+
+number functions
+===============
+select round(column_name)
+from table;
+
+
+mysql> select round(1234.8);
++---------------+
+| round(1234.8) |
++---------------+
+|          1235 |
++---------------+
+1 row in set (0.05 sec)
+
+
+select round(1983.5,0); 
+
+select round(1274.5,-1)=1270
+
+truncate
+select truncate(198.34567,3);
+
+ceil
+select ceil(2.83)
+
+floor
+select floor(2.83)
+
+ select abs(-2.2);
+
+power(m,n)
+
+select power(2,3)
+
+
+sqrt(n)
+select sqrt(25);
+
+mod(m,n)
+select mod(25,5);
+
+length
+select ename,length(ename)
+from emp;
+
+select  length("Hello pune");
+ 
+lower()
+select ename,lower(ename)
+from emp;
+
+upper()
+select ename,upper(lower(ename))
+from emp;
+
+ascii
+select ename,ascii(ename)
+from emp;
+
+concat()
+select ename,job,concat(ename,job)
+from emp;
+
+select ename,job,concat(ename,job,deptno)
+from emp;
+
+select ename,job,concat(ename,':',job,':',deptno)
+from emp;
+
+
+concat_ws()
+select  concat_ws(':',ename,job,deptno)
+from emp;
+
+reverse()
+select ename,reverse(ename)
+from emp;
+
+substr(str,pos,no of char)
+select ename, substr(ename,2,3)
+from emp;
+select ename, substr(ename,-1,2)
+from emp;
+
+
+email
+2 letters name in lower case+
+last 3 letters of job+ deptno @knowit.com
+
+select ename,job,deptno,concat(lower(substr(ename,1,2)),substr(job,-3,3),deptno,'@knowit.com') email
+from emp;
+
+ltrim
+
+rpad
+select ename,rpad(ename,10,'#')
+from emp;
+
+replace(string,from_string,
+new_string)
+
+select replace('India is my country','is my country','big nation');
+
+
+date functions
+==============
+curdate()
+select curdate();
+
+current_date()
+select current_date();
+
+mysql> select sysdate();
++---------------------+
+| sysdate()           |
++---------------------+
+| 2026-03-11 15:27:05 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> select now()
+    -> ;
++---------------------+
+| now()               |
++---------------------+
+| 2026-03-11 15:28:01 |
++---------------------+
+1 row in set (0.00 sec)
+
+select date_format(curdate(),"%y");
+
+select ename,hiredate
+from emp
+where date_format(hiredate,"%y")=80;
+
+select date_format(curdate(),"%m");
+
+select date_format(curdate(),"%M");
+
+
+select ename,hiredate
+from emp
+where date_format(hiredate,"%m")=02;
+

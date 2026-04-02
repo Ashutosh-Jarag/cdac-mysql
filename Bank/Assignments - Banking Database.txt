@@ -1,0 +1,317 @@
+
+Assignments banking database
+============================== 
+
+1. Display all records from **Customer** table.
+
+select * from customer;
+
+
+2. Show all **branches** available in the bank.
+
+select * from  branch;
+
+
+3. Display **name and phone number** of customers.
+
+select name, phone from customer;
+
+
+4. Show all **Savings accounts**.
+
+select * from account 
+where account_type = 'savings';
+
+5. Display accounts with **balance greater than 50,000**.
+
+select * from account
+where balance > 50000;
+
+
+
+6. Show customers living in **Pune**.
+
+select * from customer
+where address = 'pune';
+
+
+7. Display **loan types** available in the bank.
+
+select distinct loan_type from loan;
+
+8. Show **all transactions**.
+select * from transactions;
+
+9. Display **customer names in ascending order**.
+
+select * from customer
+order by name asc;
+
+
+10. Show accounts opened **after 2023-03-01**.
+
+select * from account 
+where open_date > '2023-03-01';
+
+11. Show accounts with **balance between 40,000 and 80,000**.
+
+select * from account 
+where balance between 40000 and 80000;
+
+12. Display customers whose **name starts with 'R'**.
+select * from customer
+where name like 'r%';
+
+
+13. Show transactions with **amount greater than 5000**.
+
+select * from transactions 
+where amount < 5000;
+
+
+14. Display loans with **status = 'Approved'**.
+
+select * from loan 
+where status = 'Approved';
+
+
+15. Show accounts with **account type = 'Savings' AND balance > 50000**.
+
+
+select * from account
+where account_type = 'savings' and balance >50000;
+
+
+
+
+16. Display customers **not from Pune**.
+
+select * from customer
+where address not in ('pune');
+
+
+17. Show **distinct account types**.
+select distinct account_type
+from account;
+
+18. Display transactions **sorted by amount (descending)**.
+
+
+select * from transactions
+order by amount desc;
+
+
+19. Show customers whose **phone number ends with 5**.
+
+select * from customer
+where regexp_like(phone, '[5]$');
+
+
+20. Display loans where **amount > 200000**.
+
+select * from loan 
+where amount > 200000;
+
+
+21. Find **total number of customers**.
+
+select count(*) from customer;
+
+
+22. Find **total balance in all accounts**.
+
+select sum(balance) as total_balance
+from account;
+
+
+
+23. Find **average account balance**.
+
+select avg(balance) as avg_balance
+from account;
+
+
+
+24. Find **maximum account balance**.
+
+select max(balance) from account;
+
+25. Find **minimum transaction amount**.
+
+select min(balance) from account;
+
+
+26. Count **total number of transactions**.
+
+select count(*) from transactions;
+
+
+27. Count number of **accounts by account type**.
+
+select count(*) from account
+group by account_type;
+
+
+28. Show **total loan amount**.
+
+select SUM(amount) from loan ;
+
+
+29. Find **number of customers in each branch**.
+
+select count(*) from customer
+group by branch_id;
+
+
+30. Show **total transaction amount per account**.
+
+select account_id, sum(amount) from transactions
+group by account_id;
+
+31. Display **customer name and account balance**.
+
+select c.customer_id, c.name, a.account_id, a.balance
+from customer c
+join account a
+on c.customer_id = a.customer_id;
+
+
+32. Show **customer name, branch name**.
+
+select c.name, c.branch_id, b.branch_name
+from customer c
+join branch b
+on c.branch_id = b.branch_id;
+
+
+33. Display **customer name and loan amount**.
+
+select c.name, l.amount
+from customer c
+join loan l
+on c.customer_id = l.customer_id;
+
+
+34. Show **account details with customer phone number**.
+
+select a.*, c.phone
+from account a
+join customer c
+on a.customer_id = c.customer_id; 
+
+
+35. Display **transaction details with customer name**.
+
+
+select t.transaction_id, t.account_id, a.customer_id, c.customer_id
+from transactions t
+join account a
+on t.account_id = a.account_id
+join customer c
+on a.customer_id = c.customer_id;  
+
+
+
+36. Show **customer name, branch city, and account type**.
+
+select c.name, b.city, a.account_type
+from customer c 
+join branch b
+on c.branch_id = b.branch_id
+join account a
+on a.customer_id = c.customer_id;
+
+37. Show **loan details with customer and branch name**.
+
+select l.*, c.customer_id, b.branch_name
+from loan l
+join customer c
+on l.customer_id = c.customer_id
+join branch b 
+on b.branch_id = c.branch_id;
+
+38. Display **customers who have accounts**.
+
+select * from customer c
+join account a
+on c.customer_id = a.customer_id;
+
+
+39. Display **customers who have taken loans**.
+
+select * from customer c
+join loan l
+on c.customer_id = l.customer_id;
+
+40. Show **transaction amount with account type**.
+
+SELECT t.transaction_id, t.amount, t.transaction_type, a.account_type
+FROM transactions t
+JOIN account a
+ON t.account_id = a.account_id;
+
+
+
+
+41. Find **customer who has maximum account balance**.
+
+select c.customer_id, c.name, a.account_id , a.balance
+from customer c 
+join account a
+on c.customer_id = a.customer_id
+order by a.balance desc limit 1;
+
+
+select c.customer_id, c.name, a.account_id , a.balance
+from customer c 
+join account a
+on c.customer_id = a.customer_id
+where a.balance = (select max(balance) from account);
+
+
+42. Find accounts with **balance greater than average balance**.
+
+select * from account 
+where balance > (select avg(balance) from account);
+
+
+43. Find customers who **have taken loans**.
+
+SELECT * FROM customer
+WHERE customer_id IN (SELECT customer_id FROM loan);
+
+
+44. Display accounts that **have transactions**.
+select * from account 
+where account_id in (select account_id from transactions);
+
+
+ 
+45. Find customers who **do not have loans**.
+
+SELECT * FROM customer
+WHERE customer_id NOT IN (SELECT customer_id FROM loan);
+
+46. Find customers whose **account balance is greater than the average balance 
+    of their branch**.
+	
+SELECT name, balance, branch_name
+FROM (
+    SELECT c.name, a.balance, b.branch_name,
+    AVG(a.balance) OVER(PARTITION BY c.branch_id) AS branch_avg
+    FROM customer c
+    JOIN account a ON c.customer_id = a.customer_id
+    JOIN branch b ON c.branch_id = b.branch_id
+) AS temp
+WHERE balance > branch_avg;
+	
+	
+	
+47. Find accounts whose **balance is higher than another account 
+    of same customer**.
+48. Show customers whose **loan amount is greater than average loan amount**.
+49. Find customers who **made transactions greater than 5000**.
+50. Find accounts that **have the highest balance in their branch**.
+
+ 
+

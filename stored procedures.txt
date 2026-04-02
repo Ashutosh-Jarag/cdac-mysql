@@ -1,0 +1,123 @@
+--1 
+delimiter //
+create procedure p1()
+begin 
+	select avg(sal) from emp;
+end // 
+delimiter ;
+
+call p1();
+
+
+--2 
+delimiter // 
+create procedure p2()
+begin 
+	select avg(sal) from emp
+	where deptno = 20
+	group by deptno;
+	
+end //
+delimiter ;
+
+call p2();
+
+--3
+delimiter // 
+create procedure p2(IN n int)
+begin 
+	select avg(sal) from 
+	where deptno = n
+	group by deptno;
+	
+end //
+delimiter ;
+
+call p2(10);
+
+
+--4
+delimiter // 
+create procedure p4(IN n int, out maxsal int)
+begin 
+	select (sal+infnull(comm,0)) into maxsal 
+	from emp 
+	where empno = n;
+	
+end //
+delimiter ;
+
+call p4(7399, @p);
+
+call p4(7399, @p);
+
+
+--5 
+DELIMITER //
+CREATE PROCEDURE p5(IN n INT)
+BEGIN
+    IF n IS NOT NULL THEN
+        SELECT empno, ename, 'Found' AS message 
+        FROM emp
+        WHERE empno = n;
+    ELSE
+        SELECT 'Employee Not Found' AS message;
+    END IF;
+END //
+DELIMITER ;
+
+CALL p5(7839);
+
+
+
+--5 
+DELIMITER //
+CREATE PROCEDURE p51(IN n INT, OUT result INT)
+BEGIN
+	select count(*)as total
+	from emp 
+	where empno = n;
+	
+	IF total > 0 then
+		select ename, sal, 'FOUND' as message from emp 
+		where empno = n;
+		set result = 'FOUND';
+	ELSE
+		SELECT emame, sal, 'NOT FOUND' as message;
+		set result = 'NOT FOUND';
+	END IF;
+END // 
+DELIMITER ;
+
+CALL p5(7839, @output);
+SELECT @output;
+
+CALL p5(9999, @output);
+SELECT @output;
+
+--6
+
+DELIMITER //
+CREATE PROCEDURE p6(IN n INT, OUT emame VARCHAR(20))
+BEGIN
+	select ename, sal, deptno, job 
+	from emp
+	where empno = n;
+end //
+DELIMITER ;
+
+
+CALL p6(7839, @name);
+SELECT @name;
+
+
+DELIMITER //
+CREATE PROCEDURE p61(IN n INT)
+BEGIN
+	select ename, sal, deptno, job 
+	from emp
+	where empno = n;
+end //
+DELIMITER ;
+
+call p61(7839);

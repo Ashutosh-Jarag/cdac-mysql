@@ -1,0 +1,7 @@
+select ename, sal, deptno  from emp e1
+where sal > (select avg(sal) from emp e2 
+where e2.deptno = e1.deptno )
+
+select deptno, ename, sal from emp e1 
+where sal = (select max(sal) from emp e2
+where e2.deptno  =  e1.deptno);

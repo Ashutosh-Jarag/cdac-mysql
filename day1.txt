@@ -1,0 +1,63 @@
+--login credientials
+mysql -u root -p
+
+Username -  root
+Password - NewPassword123
+
+
+-- for display all databases
+SHOW DATABASES;
+
+
+-- to create database
+CREATE DATABASE knowit;
+
+-- to use that specific database
+USE knowit;
+
+
+-- to create sechma/table
+CREATE TABLE student(
+	rollno INT,
+	first_name VARCHAR(50),
+	last_name VARChAR(50),
+	dob DATE,
+	per FLOAT
+);
+
+-- to insert data into table
+
+INSERT INTO student (rollno, first_name, last_name, dob, per) 
+VALUES
+(1, 'Ashutosh', 'Jarag', '2000-03-15', 85.4),
+(2, 'Jeewan', 'Gariya', '2001-07-22', 91.2),
+(3, 'Harhsal', 'Bhosale', '2000-11-08', 78.6),
+(4, 'Sachin', 'Patil', '2002-01-30', 88.9),
+(5, 'Vikram', 'Singh', '2001-05-17', 72.3),
+(6, 'Ananya', 'Mehta', '2000-09-04', 95.1),
+(7, 'Karan', 'Joshi', '2002-03-21', 83.7),
+(8, 'Pooja', 'Yadav', '2001-12-11', 67.8),
+(9, 'Arjun', 'Mishra', '2000-06-28', 90.5),
+(10, 'Divya', 'Reddy', '2002-08-14', 76.2);
+
+-- show data from table
+SELECT * FROM student;
+
++--------+------------+-----------+------------+------+
+| rollno | first_name | last_name | dob        | per  |
++--------+------------+-----------+------------+------+
+|      1 | Ashutosh   | Jarag     | 2000-03-15 | 85.4 |
+|      2 | Jeewan     | Gariya    | 2001-07-22 | 91.2 |
+|      3 | Harhsal    | Bhosale   | 2000-11-08 | 78.6 |
+|      4 | Sachin     | Patil     | 2002-01-30 | 88.9 |
+|      5 | Vikram     | Singh     | 2001-05-17 | 72.3 |
+|      6 | Ananya     | Mehta     | 2000-09-04 | 95.1 |
+|      7 | Karan      | Joshi     | 2002-03-21 | 83.7 |
+|      8 | Pooja      | Yadav     | 2001-12-11 | 67.8 |
+|      9 | Arjun      | Mishra    | 2000-06-28 | 90.5 |
+|     10 | Divya      | Reddy     | 2002-08-14 | 76.2 |
++--------+------------+-----------+------------+------+
+
+
+-- delete database 
+DROP DATABASE student;

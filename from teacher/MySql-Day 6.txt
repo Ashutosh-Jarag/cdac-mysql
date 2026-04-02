@@ -1,0 +1,114 @@
+joins in RDBMS
+=============
+
+cross join
+
+select e.ename,e.deptno,d.deptno,d.dname
+from emp e
+join dept d;
+
+
+self join(retrive only common data)
+================================
+
+equi join
+----------
+select e.ename,e.deptno,d.deptno,d.dname
+from emp e
+join dept d
+on e.deptno=d.deptno;
+
+nonequi join
+----------------
+select e.ename,e.deptno,e.sal,s.grade
+from emp e
+join salgrade s
+on e.sal between s.losal and s.hisal;
+
+
+self join
+---------
+select e.empno,e.ename,e.mgr,m.ename "manager"
+from emp e
+join emp m
+on e.mgr=m.empno;
+
+outer join(common data+extra data from left/rt)
+=================================================
+select e.empno,e.ename,e.sal,e.deptno,d.deptno,d.dname,d.loc
+from emp e
+left join dept d
+on e.deptno=d.deptno;
+
+
+select e.empno,e.ename,e.sal,e.deptno,d.deptno,d.dname,d.loc
+from emp e
+right join dept d
+on e.deptno=d.deptno;
+
+select e.empno,e.ename,e.sal,e.deptno,d.deptno,d.dname,d.loc
+from emp e
+left join dept d
+on e.deptno=d.deptno
+union
+select e.empno,e.ename,e.sal,e.deptno,d.deptno,d.dname,d.loc
+from emp e
+right join dept d
+on e.deptno=d.deptno;
+
+joins with 3 tables
+====================
+select e.ename,e.deptno,d.dname,e.sal,s.grade
+from emp e
+join dept d
+on e.deptno=d.deptno
+join salgrade s
+on e.sal between s.losal and s.hisal
+where e.deptno=10
+order by e.sal;
+
+Views on RDBMS
+===============
+
+create view v1
+as
+  select ename,deptno,sal,job
+  from emp;
+
+insert into v1(ename,deptno,sal,job)
+values('Rajesh',90,30000,'Develp');
+
+create view v2
+as
+  select e.ename,e.deptno,e.sal,e.job,d.dname,d.loc
+  from emp e
+  join dept d
+  on e.deptno=d.deptno;
+insert into v2(ename,deptno,sal,job,dname,loc)
+values('Amitabh',100,300000,'actor','atrs','mumbai');
+
+create view v3
+as
+  select ename,deptno,sal,job
+  from emp;
+
+create view v4
+as
+  select ename,deptno,sal,job
+  from emp
+  where job='salesman';
+
+
+create view v5
+as
+  select ename,deptno,sal,job
+  from emp
+  where job='salesman'
+  with check option;
+
+alter view v4
+add constraint t with check option;
+
+
+
+

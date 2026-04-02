@@ -1,0 +1,100 @@
+mysql> create database feb26;
+Query OK, 1 row affected (0.07 sec)
+
+mysql> use feb26;
+Database changed
+
+create table student
+(roll int,
+ name varchar(15),
+ per float(5,2),
+ dob date
+);
+
+mysql> show tables;
++-----------------+
+| Tables_in_feb26 |
++-----------------+
+| student         |
++-----------------+
+1 row in set (0.10 sec)
+
+
+
+insert into student
+values(1,'Amit',78.45,'2004-11-1');
+
+mysql> select * from student;
++------+------+-------+------------+
+| roll | name | per   | dob        |
++------+------+-------+------------+
+|    1 | Amit | 78.45 | 2004-11-01 |
++------+------+-------+------------+
+1 row in set (0.00 sec)
+
+insert into student
+values(2,'Sumit',68.45,'2005-12-1'),
+      (3,'Geeta',90.34,'2002-2-03'),
+      (4,'Seema',45.34,'2005-07-08');
+
+insert into student(roll,name)
+values(5,'Sameer');
+
+mysql> describe emp;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| EMPNO    | int          | YES  |     | NULL    |       |
+| ENAME    | varchar(10)  | YES  |     | NULL    |       |
+| JOB      | varchar(9)   | YES  |     | NULL    |       |
+| MGR      | int          | YES  |     | NULL    |       |
+| HIREDATE | date         | YES  |     | NULL    |       |
+| SAL      | decimal(7,2) | YES  |     | NULL    |       |
+| COMM     | decimal(7,2) | YES  |     | NULL    |       |
+| DEPTNO   | int          | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+select * 
+from emp
+where deptno=10;
+
+list all emps with null comm
+
+select * 
+from emp
+where comm is null;
+
+select * 
+from emp
+where comm is not null;
+
+select distinct deptno 
+from emp;
+
+select distinct deptno,job
+from emp;
+
+select ename,sal,comm,sal+comm
+from emp;
+
+select ename,sal,comm,sal+ifnull(comm,100)
+from emp;
+
+select ename name,sal salary,comm,sal+ifnull(comm,100)"Total Salary"
+from emp;
+
+sal between 1500 to 4500
+
+select ename,sal
+from emp
+where sal>=1500 and sal<=4500;
+
+select ename,sal
+from emp
+where sal between 1500 and 4500;
+
+
+
+
+

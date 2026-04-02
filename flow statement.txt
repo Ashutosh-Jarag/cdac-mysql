@@ -1,0 +1,142 @@
+--1
+
+delimiter //
+create procedure perfect_value(IN n INT, OUT result INT)
+BEGIN 
+	DECLARE i INT DEFAULT 1;
+	DECLARE total int DEFAULT 0;
+	
+	while i < n DO
+		IF n%i = 0 then 
+			SET total = total +i;
+		END IF;
+		SET i = i+1;
+	END WHILE;
+	
+	IF total = n THEN
+		SET result = 1;
+	ELSE 
+		SET result = 0;
+	END IF;
+end // 
+delimiter ; 
+
+
+call perfect_value(12, @a);
+
+select @a 'result';
+
+
+
+
+
+---2
+
+create table empTmp as select * from emp;
+
+DELIMITER //
+CREATE PROCEDURE ez1(IN job VARCHAR(50))
+	begin 
+		if job = 'manager' then 
+			update empTmp
+			set sal = sal *1.05
+			where job = 'manager';
+			
+		elseif job = 'clerk' then
+			update empTmp
+			set sal = sal *1.1
+			where job = 'clerk';
+			
+		elseif job = 'analyst' then
+			update empTmp
+			set sal = sal * 1.07
+			where job = 'analyst';
+			
+		else 
+			update empTmp 
+			set sal = sal * 1.03;
+		end if;
+	end // 
+delimiter ;
+
+CALL ez('manager');
+
+
+--3
+
+delimiter //
+create procedure factorial(in n int, out result int)
+begin 
+	declare i int default 1;
+	declare fact int default 1;
+	
+	while i <= n do
+		set fact = fact *i;
+		set i = i+1;
+	end while;
+	
+	set result = fact;
+end // 
+delimiter ;
+
+call factorial(5,@result);
+select @result;
+
+
+--4 
+DELIMITER //
+CREATE PROCEDURE new(IN n INT)
+	begin 
+		declare job varchar(40);
+		declare comm int;
+		
+		
+		select job , comm into job , comm
+		from empTmp where empno = n;
+		
+		if job = 'analyst' then 
+			update empTmp
+			set comm = 2000
+			where empno = n;
+			
+		elseif comm is null then
+			update empTmp
+			set comm = 0
+			where empno = n;
+			
+			
+		end if;
+			
+	end //
+delimiter ;
+
+CALL new(7788);
+ 
+
+
+
+--5 
+delimiter //
+create procedure print_seq1(in m int, in n int)
+begin
+	declare start int default 0;
+	declare end_val int default 0;
+	
+	if m<n then
+		set start = m;
+		set end_val = n;
+	else
+		set start = n;
+		set end_val = m;
+	end if;
+	
+	while start <= end_val do
+		select start as number; 
+		set start = start +1;
+	end while;
+end // 
+delimiter ;
+
+		
+CALL print_seq1(3, 7); 
+CALL print_seq1(7, 3);
