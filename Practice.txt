@@ -1,0 +1,165 @@
+-- =========================
+-- TABLE CREATION
+-- =========================
+
+CREATE TABLE Country (
+    CountryCode VARCHAR(3) PRIMARY KEY,
+    CountryName VARCHAR(50),
+    Continent VARCHAR(50),
+    RegionID INT
+);
+
+CREATE TABLE City (
+    CityID INT PRIMARY KEY,
+    CityName VARCHAR(50),
+    CountryCode VARCHAR(3),
+    Population INT
+);
+
+-- Additional table
+CREATE TABLE Region (
+    RegionID INT PRIMARY KEY,
+    RegionName VARCHAR(50)
+);
+
+-- =========================
+-- SAMPLE DATA (REAL-WORLD SCALE ~120+ ROWS)
+-- =========================
+
+INSERT INTO Region VALUES
+(1, 'North Africa'),
+(2, 'West Africa'),
+(3, 'East Africa'),
+(4, 'Southern Africa'),
+(5, 'Europe'),
+(6, 'Asia'),
+(7, 'Americas');
+
+INSERT INTO Country VALUES
+('EGY','Egypt','Africa',1),('DZA','Algeria','Africa',1),('MAR','Morocco','Africa',1),
+('NGA','Nigeria','Africa',2),('GHA','Ghana','Africa',2),('SEN','Senegal','Africa',2),
+('KEN','Kenya','Africa',3),('ETH','Ethiopia','Africa',3),('TZA','Tanzania','Africa',3),
+('ZAF','South Africa','Africa',4),('NAM','Namibia','Africa',4),('BWA','Botswana','Africa',4),
+('FRA','France','Europe',5),('DEU','Germany','Europe',5),('ESP','Spain','Europe',5),
+('IND','India','Asia',6),('CHN','China','Asia',6),('JPN','Japan','Asia',6),
+('USA','United States','Americas',7),('BRA','Brazil','Americas',7),('CAN','Canada','Americas',7);
+
+-- 120+ CITY ROWS
+INSERT INTO City VALUES
+-- Egypt (6)
+(1,'Cairo','EGY',9500000),(2,'Alexandria','EGY',5000000),(3,'Giza','EGY',4200000),(4,'Luxor','EGY',500000),(5,'Aswan','EGY',300000),(6,'Port Said','EGY',750000),
+-- Algeria (5)
+(7,'Algiers','DZA',3500000),(8,'Oran','DZA',1500000),(9,'Constantine','DZA',1000000),(10,'Annaba','DZA',500000),(11,'Blida','DZA',600000),
+-- Morocco (5)
+(12,'Casablanca','MAR',3400000),(13,'Rabat','MAR',580000),(14,'Marrakesh','MAR',900000),(15,'Fes','MAR',1100000),(16,'Tangier','MAR',1000000),
+-- Nigeria (8)
+(17,'Lagos','NGA',14000000),(18,'Abuja','NGA',3000000),(19,'Kano','NGA',4000000),(20,'Ibadan','NGA',3500000),(21,'Port Harcourt','NGA',1800000),(22,'Benin City','NGA',1500000),(23,'Kaduna','NGA',1600000),(24,'Jos','NGA',900000),
+-- Ghana (4)
+(25,'Accra','GHA',2300000),(26,'Kumasi','GHA',2000000),(27,'Tamale','GHA',500000),(28,'Takoradi','GHA',400000),
+-- Senegal (3)
+(29,'Dakar','SEN',1100000),(30,'Touba','SEN',800000),(31,'Saint-Louis','SEN',300000),
+-- Kenya (5)
+(32,'Nairobi','KEN',4500000),(33,'Mombasa','KEN',1200000),(34,'Kisumu','KEN',400000),(35,'Nakuru','KEN',570000),(36,'Eldoret','KEN',500000),
+-- Ethiopia (5)
+(37,'Addis Ababa','ETH',5000000),(38,'Dire Dawa','ETH',400000),(39,'Mekelle','ETH',500000),(40,'Gondar','ETH',350000),(41,'Bahir Dar','ETH',300000),
+-- Tanzania (4)
+(42,'Dar es Salaam','TZA',6000000),(43,'Dodoma','TZA',400000),(44,'Mwanza','TZA',700000),(45,'Arusha','TZA',500000),
+-- South Africa (6)
+(46,'Johannesburg','ZAF',5500000),(47,'Cape Town','ZAF',4600000),(48,'Durban','ZAF',3400000),(49,'Pretoria','ZAF',2400000),(50,'Port Elizabeth','ZAF',1200000),(51,'Bloemfontein','ZAF',750000),
+-- Namibia (3)
+(52,'Windhoek','NAM',430000),(53,'Walvis Bay','NAM',70000),(54,'Swakopmund','NAM',75000),
+-- Botswana (3)
+(55,'Gaborone','BWA',250000),(56,'Francistown','BWA',100000),(57,'Maun','BWA',60000),
+-- France (5)
+(58,'Paris','FRA',2100000),(59,'Lyon','FRA',500000),(60,'Marseille','FRA',870000),(61,'Toulouse','FRA',480000),(62,'Nice','FRA',340000),
+-- Germany (5)
+(63,'Berlin','DEU',3700000),(64,'Hamburg','DEU',1800000),(65,'Munich','DEU',1500000),(66,'Cologne','DEU',1000000),(67,'Frankfurt','DEU',750000),
+-- Spain (5)
+(68,'Madrid','ESP',3300000),(69,'Barcelona','ESP',1600000),(70,'Valencia','ESP',800000),(71,'Seville','ESP',700000),(72,'Bilbao','ESP',350000),
+-- India (8)
+(73,'Mumbai','IND',20000000),(74,'Delhi','IND',19000000),(75,'Bangalore','IND',13000000),(76,'Hyderabad','IND',10000000),(77,'Chennai','IND',9000000),(78,'Kolkata','IND',15000000),(79,'Pune','IND',7000000),(80,'Ahmedabad','IND',8000000),
+-- China (6)
+(81,'Shanghai','CHN',24000000),(82,'Beijing','CHN',21000000),(83,'Shenzhen','CHN',17000000),(84,'Guangzhou','CHN',15000000),(85,'Chengdu','CHN',16000000),(86,'Wuhan','CHN',11000000),
+-- Japan (5)
+(87,'Tokyo','JPN',37000000),(88,'Osaka','JPN',19000000),(89,'Nagoya','JPN',9000000),(90,'Sapporo','JPN',2000000),(91,'Fukuoka','JPN',1600000),
+-- USA (8)
+(92,'New York','USA',8400000),(93,'Los Angeles','USA',4000000),(94,'Chicago','USA',2700000),(95,'Houston','USA',2300000),(96,'Phoenix','USA',1700000),(97,'Philadelphia','USA',1600000),(98,'San Antonio','USA',1500000),(99,'San Diego','USA',1400000),
+-- Brazil (5)
+(100,'Sao Paulo','BRA',22000000),(101,'Rio de Janeiro','BRA',13000000),(102,'Brasilia','BRA',3000000),(103,'Salvador','BRA',2900000),(104,'Fortaleza','BRA',2700000),
+-- Canada (4)
+(105,'Toronto','CAN',3000000),(106,'Vancouver','CAN',700000),(107,'Montreal','CAN',1800000),(108,'Calgary','CAN',1300000);
+
+-- =========================
+-- BASIC QUERY (Africa Cities)
+-- =========================
+
+SELECT c.CityName
+FROM City c
+JOIN Country co ON c.CountryCode = co.CountryCode
+WHERE co.Continent = 'Africa';
+
+-- =========================
+-- GROUP BY QUESTIONS
+-- =========================
+
+-- 1. Total population per country
+SELECT co.CountryName, SUM(c.Population) AS TotalPopulation
+FROM City c
+JOIN Country co ON c.CountryCode = co.CountryCode
+GROUP BY co.CountryName;
+
+-- 2. Average city population per continent
+SELECT co.Continent, AVG(c.Population) AS AvgPopulation
+FROM City c
+JOIN Country co ON c.CountryCode = co.CountryCode
+GROUP BY co.Continent;
+
+-- 3. Number of cities per region
+SELECT r.RegionName, COUNT(c.CityID) AS CityCount
+FROM City c
+JOIN Country co ON c.CountryCode = co.CountryCode
+JOIN Region r ON co.RegionID = r.RegionID
+GROUP BY r.RegionName;
+
+-- 4. Max population city per country
+SELECT co.CountryName, MAX(c.Population) AS MaxCityPopulation
+FROM City c
+JOIN Country co ON c.CountryCode = co.CountryCode
+GROUP BY co.CountryName;
+
+-- =========================
+-- WINDOW FUNCTION QUESTIONS
+-- =========================
+
+-- 1. Rank cities by population within each country
+SELECT CityName, CountryCode, Population,
+       RANK() OVER (PARTITION BY CountryCode ORDER BY Population DESC) AS RankInCountry
+FROM City;
+
+-- 2. Running total of population within each country
+SELECT CityName, CountryCode, Population,
+       SUM(Population) OVER (PARTITION BY CountryCode ORDER BY Population) AS RunningTotal
+FROM City;
+
+-- 3. Row number for cities per continent
+SELECT c.CityName, co.Continent,
+       ROW_NUMBER() OVER (PARTITION BY co.Continent ORDER BY c.Population DESC) AS RowNum
+FROM City c
+JOIN Country co ON c.CountryCode = co.CountryCode;
+
+-- 4. Compare city population with country average
+SELECT c.CityName, co.CountryName, c.Population,
+       AVG(c.Population) OVER (PARTITION BY co.CountryCode) AS AvgCountryPop
+FROM City c
+JOIN Country co ON c.CountryCode = co.CountryCode;
+
+-- 5. Dense rank of cities globally
+SELECT CityName, Population,
+       DENSE_RANK() OVER (ORDER BY Population DESC) AS DenseRankGlobal
+FROM City;
+
+-- 6. Lead & Lag example
+SELECT CityName, Population,
+       LAG(Population) OVER (ORDER BY Population) AS PrevCityPop,
+       LEAD(Population) OVER (ORDER BY Population) AS NextCityPop
+FROM City;
