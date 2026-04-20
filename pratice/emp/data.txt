@@ -1,0 +1,108 @@
+
+
+--  
+
+CREATE TABLE departments (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50)
+);
+
+INSERT INTO departments VALUES
+(101, 'IT'),
+(102, 'HR'),
+(103, 'Sales'),
+(104, 'Finance'),
+(105, 'Marketing');
+
+
+-- employees
+
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    dept_id INT,
+    salary INT
+);
+
+
+INSERT INTO employees VALUES
+(1, 'Ashu', 101, 50000),
+(2, 'Ravi', 101, 60000),
+(3, 'Priya', 102, 55000),
+(4, 'Neha', 102, 70000),
+(5, 'Amit', 103, 45000),
+(6, 'Karan', 103, 48000),
+(7, 'Sneha', 104, 75000),
+(8, 'Pooja', 104, 72000),
+(9, 'Rahul', 105, 65000),
+(10, 'Ankit', 101, 58000),
+(11, 'Simran', 102, 62000),
+(12, 'Vikas', 103, 47000),
+(13, 'Rohit', 104, 80000),
+(14, 'Meena', 105, 67000),
+(15, 'Arjun', 101, 61000),
+(16, 'Nisha', 102, 54000),
+(17, 'Deepak', 103, 49000),
+(18, 'Tina', 104, 71000),
+(19, 'Varun', 105, 69000),
+(20, 'Kriti', 101, 63000);
+
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    city VARCHAR(50)
+);
+
+INSERT INTO customers VALUES
+(1, 'Rahul', 'Pune'),
+(2, 'Sneha', 'Mumbai'),
+(3, 'Arjun', 'Delhi'),
+(4, 'Neha', 'Pune'),
+(5, 'Amit', 'Bangalore'),
+(6, 'Pooja', 'Mumbai'),
+(7, 'Rohit', 'Delhi'),
+(8, 'Karan', 'Pune'),
+(9, 'Simran', 'Mumbai'),
+(10, 'Vikas', 'Delhi'),
+(11, 'Meena', 'Bangalore'),
+(12, 'Deepak', 'Pune'),
+(13, 'Tina', 'Mumbai'),
+(14, 'Varun', 'Delhi'),
+(15, 'Kriti', 'Bangalore'),
+(16, 'Ankit', 'Pune'),
+(17, 'Nisha', 'Mumbai'),
+(18, 'Ashu', 'Delhi'),
+(19, 'Priya', 'Bangalore'),
+(20, 'Rahul2', 'Pune');
+
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    amount INT,
+    order_date DATE
+);
+
+INSERT INTO orders VALUES
+(1, 1, 2000, '2024-01-10'),
+(2, 1, 3000, '2024-02-15'),
+(3, 2, 1500, '2024-01-20'),
+(4, 3, 4000, '2024-03-05'),
+(5, 2, 2500, '2024-02-25'),
+(6, 4, 1800, '2024-01-18'),
+(7, 5, 2200, '2024-03-10'),
+(8, 6, 2700, '2024-02-05'),
+(9, 7, 3500, '2024-03-15'),
+(10, 8, 1200, '2024-01-22'),
+(11, 9, 2600, '2024-02-12'),
+(12, 10, 3100, '2024-03-18'),
+(13, 11, 2800, '2024-01-30'),
+(14, 12, 2000, '2024-02-08'),
+(15, 13, 3300, '2024-03-12'),
+(16, 14, 2900, '2024-01-25'),
+(17, 15, 2100, '2024-02-20'),
+(18, 16, 2400, '2024-03-08'),
+(19, 17, 2600, '2024-01-28'),
+(20, 18, 3700, '2024-02-18'),
+(21, 19, 1900, '2024-03-02'),
+(22, 20, 3000, '2024-03-22');   

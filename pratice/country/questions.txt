@@ -1,0 +1,131 @@
+mysql> show tables;
++-----------------+
+| Tables_in_world |
++-----------------+
+| city            |
+| country         |
+| region          |
++-----------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from city limit 1;
++--------+----------+-------------+------------+
+| CityID | CityName | CountryCode | Population |
++--------+----------+-------------+------------+
+|      1 | Cairo    | EGY         |    9500000 |
++--------+----------+-------------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from country limit 1;
++-------------+-------------+-----------+----------+
+| CountryCode | CountryName | Continent | RegionID |
++-------------+-------------+-----------+----------+
+| BRA         | Brazil      | Americas  |        7 |
++-------------+-------------+-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select * from region limit 1;
++----------+--------------+
+| RegionID | RegionName   |
++----------+--------------+
+|        1 | North Africa |
++----------+--------------+
+1 row in set (0.00 sec)
+
+-----------------------------------------------------------------------------
+
+Window Functions
+
+1.	Find top 3 highest populated cities per country. 
+2.	Rank cities within each continent by population. 
+3.	Find 2nd highest populated city per country. 
+4.	Running total of population per country. 
+5.	Cities above country average population. 
+6.	Difference between current and previous city population. 
+7.	Next city population using LEAD. 
+8.	Dense rank of cities globally. 
+9.	Row number per continent. 
+10.	Cumulative average population per country.
+
+-----------------------------------------------------------------------------
+
+
+Group By & Aggregations
+
+11.	Total population per country. 
+
+select cd.CountryName, sum(c.population) as total_population from city c
+join country cd
+on c.CountryCode = cd.CountryCode
+group by CountryName;
+
+
+
+12.	Count cities per country. 
+
+select cd.CountryName, count(c.CityName) as count  from city c
+join country cd
+on c.CountryCode = cd.CountryCode
+group by CountryName;
+
+13.	Total population per region. 
+
+select r.RegionName, sum(c.population) as total_population from city c
+join country cd
+on c.CountryCode = cd.CountryCode
+join region r
+on cd.RegionID = r.RegionID
+group by RegionName;
+
+14.	Countries with total population > 10M. 
+
+select cd.CountryName, sum(c.population) as total_population from city c
+join country cd
+on c.CountryCode = cd.CountryCode
+group by CountryName
+Having sum(population) > 10000000;
+
+
+15.	Count cities per continent. 
+
+select cd.Continent, count(c.CityName) as total_cities from city c
+join country cd
+on c.CountryCode = cd.CountryCode
+group by cd.Continent;
+
+
+16.	Continents having more than 10 cities. 
+
+select cd.Continent, count(c.CityName) as total_cities from city c
+join country cd
+on c.CountryCode = cd.CountryCode
+group by cd.Continent
+having count(c.CityName)>10;
+
+
+
+17.	Duplicate population cities.
+
+
+
+
+ 
+18.	Max population city per country. 
+19.	Min population city per continent. 
+20.	Average population per region. 
+
+-----------------------------------------------------------------------------
+
+
+CTE (Common Table Expressions)
+
+21.	Use CTE to find max population per country. 
+22.	Cities above global average using CTE. 
+23.	Top city per region using CTE + RANK. 
+24.	Filter African cities using CTE. 
+25.	Multiple CTEs for aggregation and filtering. 
+26.	Rank cities and filter top 5 using CTE. 
+27.	Bottom 2 cities per country. 
+28.	Cities with same population within country. 
+29.	Percentage contribution of city population in country. 
+30.	Cities ranked between 3 and 5 per country. 

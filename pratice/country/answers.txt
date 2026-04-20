@@ -1,0 +1,33 @@
+e 2: SQL Answer Key
+Filename Recommendation: SQL_Practice_Answers.docx
+1.	SELECT * FROM (SELECT *, RANK() OVER (PARTITION BY CountryCode ORDER BY Population DESC) rnk FROM City) t WHERE rnk <= 3; 
+2.	SELECT c.CityName, co.Continent, RANK() OVER (PARTITION BY co.Continent ORDER BY c.Population DESC) rnk FROM City c JOIN Country co ON c.CountryCode = co.CountryCode; 
+3.	SELECT * FROM (SELECT *, ROW_NUMBER() OVER (PARTITION BY CountryCode ORDER BY Population DESC) rn FROM City) t WHERE rn = 2; 
+4.	SELECT CityName, CountryCode, SUM(Population) OVER (PARTITION BY CountryCode ORDER BY Population) running_total FROM City; 
+5.	SELECT * FROM (SELECT *, AVG(Population) OVER (PARTITION BY CountryCode) avg_pop FROM City) t WHERE Population > avg_pop; 
+6.	SELECT CityName, Population, Population - LAG(Population) OVER (ORDER BY Population) diff FROM City; 
+7.	SELECT CityName, Population, LEAD(Population) OVER (ORDER BY Population) next_pop FROM City; 
+8.	SELECT CityName, DENSE_RANK() OVER (ORDER BY Population DESC) drnk FROM City; 
+9.	SELECT c.CityName, co.Continent, ROW_NUMBER() OVER (PARTITION BY co.Continent ORDER BY c.Population DESC) rn FROM City c JOIN Country co ON c.CountryCode = co.CountryCode; 
+10.	SELECT CityName, AVG(Population) OVER (PARTITION BY CountryCode ORDER BY Population) cum_avg FROM City; 
+11.	SELECT CountryCode, SUM(Population) FROM City GROUP BY CountryCode; 
+12.	SELECT CountryCode, COUNT(*) FROM City GROUP BY CountryCode; 
+13.	SELECT r.RegionName, SUM(c.Population) FROM City c JOIN Country co ON c.CountryCode = co.CountryCode JOIN Region r ON co.RegionID = r.RegionID GROUP BY r.RegionName; 
+14.	SELECT CountryCode FROM City GROUP BY CountryCode HAVING SUM(Population) > 10000000; 
+15.	SELECT co.Continent, COUNT(*) FROM City c JOIN Country co ON c.CountryCode = co.CountryCode GROUP BY co.Continent; 
+16.	SELECT co.Continent FROM City c JOIN Country co ON c.CountryCode = co.CountryCode GROUP BY co.Continent HAVING COUNT(*) > 10; 
+17.	SELECT Population FROM City GROUP BY Population HAVING COUNT(*) > 1; 
+18.	SELECT CountryCode, MAX(Population) FROM City GROUP BY CountryCode; 
+19.	SELECT co.Continent, MIN(c.Population) FROM City c JOIN Country co ON c.CountryCode = co.CountryCode GROUP BY co.Continent; 
+20.	SELECT r.RegionName, AVG(c.Population) FROM City c JOIN Country co ON c.CountryCode = co.CountryCode JOIN Region r ON co.RegionID = r.RegionID GROUP BY r.RegionName; 
+21.	WITH cte AS (SELECT CountryCode, MAX(Population) max_pop FROM City GROUP BY CountryCode) SELECT * FROM cte; 
+22.	WITH avg_cte AS (SELECT AVG(Population) avg_pop FROM City) SELECT * FROM City, avg_cte WHERE City.Population > avg_cte.avg_pop; 
+23.	WITH cte AS (SELECT c.CityName, r.RegionName, RANK() OVER (PARTITION BY r.RegionName ORDER BY c.Population DESC) rnk FROM City c JOIN Country co ON c.CountryCode = co.CountryCode JOIN Region r ON co.RegionID = r.RegionID) SELECT * FROM cte WHERE rnk = 1; 
+24.	WITH africa AS (SELECT c.* FROM City c JOIN Country co ON c.CountryCode = co.CountryCode WHERE co.Continent = 'Africa') SELECT * FROM africa; 
+25.	WITH pop_cte AS (SELECT CountryCode, SUM(Population) total_pop FROM City GROUP BY CountryCode), filtered AS (SELECT * FROM pop_cte WHERE total_pop > 10000000) SELECT * FROM filtered; 
+26.	WITH ranked AS (SELECT *, RANK() OVER (ORDER BY Population DESC) rnk FROM City) SELECT * FROM ranked WHERE rnk <= 5; 
+27.	WITH cte AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY CountryCode ORDER BY Population) rn FROM City) SELECT * FROM cte WHERE rn <= 2; 
+28.	WITH cte AS (SELECT CountryCode, Population, COUNT(*) cnt FROM City GROUP BY CountryCode, Population) SELECT * FROM cte WHERE cnt > 1; 
+29.	SELECT CityName, CountryCode, Population * 1.0 / SUM(Population) OVER (PARTITION BY CountryCode) pct FROM City; 
+30.	WITH cte AS (SELECT *, RANK() OVER (PARTITION BY CountryCode ORDER BY Population DESC) rnk FROM City) SELECT * FROM cte WHERE rnk BETWEEN 3 AND 5; 
+

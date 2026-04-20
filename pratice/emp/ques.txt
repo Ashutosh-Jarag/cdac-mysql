@@ -1,0 +1,222 @@
+🧠 1. SUBQUERIES
+
+🟢 Easy
+
+1. Find employees earning more than average salary
+
+select * from emp
+where salary > (select avg(salary) from emp);
+
+2. Find customers who made at least one order.
+
+select * from cust 
+where customer_id in (select customer_id from orders);
+
+3. Get employee with maximum salary
+
+select * from emp
+where salary = (select max(salary) from emp);
+
+4. Find orders greater than average order amount
+
+select * from orders
+where amount > (SELECT avg(amount) from orders);
+
+
+🟡 Medium
+
+1. Find employees earning more than their department average.
+
+select * from emp e1
+where salary > (select avg(salary) from emp e2 where e2.dept_id = e1.dept_id);
+
+2. Find customers who spent more than overall average spending.
+
+select * from cust c
+where (select sum(amount) from orders o where o.customer_id = c.customer_id) > (select avg(amount) from orders);
+
+
+
+
+3. Get second highest salary using subquery
+
+select max(salary), name from emp
+where salary != (select max(salary) from  emp);
+
+select name, salary from emp 
+where salary = (select max(salary) from emp where salary != (select max(salary) from emp));
+
+select name, salary from emp
+order by salary desc
+limit 1 offset 1;
+
+
+4. Find employees who work in departments with more than 3 employees
+
+select * from emp
+where dept_id in (select dept_id from emp group by dept_id having count(*) > 3)
+order by dept_id;
+
+
+🔴 Hard
+Find employees whose salary is greater than all employees in HR
+Find customers who spent more than every customer in Pune
+Get top 3 salaries using subquery only (no window functions)
+Find employees whose salary is above average of top 5 salaries
+
+
+📊 2. GROUP BY
+
+🟢 Easy
+
+1. Count employees in each department
+
+select dept_id,count(*) as count_emp from emp 
+group by dept_id;
+
+2. Find average salary per department
+
+select dept_id, avg(salary) from emp
+group by dept_id;
+
+3. Total orders per customer
+
+select customer_id, count(order_id) from orders
+group by customer_id;
+
+
+4. Max order amount per customer
+
+select customer_id, max(amount) from orders
+group by customer_id;
+
+
+
+🟡 Medium
+
+1. Departments having more than 3 employees
+
+select dept_id, count(*) from emp 
+group by dept_id
+having count(*) > 3;
+
+2. Customers with total spending > 5000
+
+select customer_id, sum(amount) 
+from orders
+group by customer_id
+having sum(amount)>3000;
+
+Find department with highest average salary
+Get customers who placed more than 2 orders
+🔴 Hard
+Find top 2 departments by total salary
+Get employees working in departments with max total salary
+Find customers whose spending is above average of all customers
+Find department where sum of salary > sum of another department
+
+
+
+🪟 3. WINDOW FUNCTIONS
+
+🟢 Easy
+
+1. Assign row number to employees by salary
+
+select *,row_number()over(order by salary) from emp;
+
+
+2. Rank employees based on salary
+
+select *, rank()over(order by salary) from emp;
+
+
+3. Find total salary of all employees using window function
+
+select *, sum(salary) over() as total_salary from emp;
+
+4. Show each employee with department total salary
+
+select *, sum(salary) over(PARTITION by dept_id) as total_dept_salary
+from emp;
+
+🟡 Medium
+
+1. Rank employees within each department
+
+select *, rank()over(PARTITION by dept_id order by salary desc) as find
+from emp;
+
+2. Find second highest salary in each department
+
+select *
+from
+(select *, rank()over(PARTITION by dept_id order by salary desc) as find
+from emp) as t 
+where t.find = 2;
+
+
+3. Calculate running total of orders per customer
+
+select *,sum(amount)over(PARTITION by customer_id order by order_date) as running_total
+from orders;
+
+
+4. Use LAG to find previous salary
+
+select *,lag(salary)over(order by salary) as previous_salary
+from emp;
+
+🔴 Hard
+
+1. Find top 2 employees per department using window functions
+
+select * from 
+(select *,rank()over(PARTITION by dept_id order by salary desc) as rnk from emp) as t 
+where t.rnk <= 2;
+
+
+
+
+2. Find employees whose salary is greater than previous employee
+
+select * from
+(
+select *, lag(salary)over(order by salary) as previous_salary from emp)t
+where t.salary > t.previous_salary;
+
+
+3. Find gap between current and next order (LEAD)
+
+select *, datediff(t.next_order_date,t.order_date) as gap_between_orders from (
+select *, lead(order_date)over(order by order_date) as next_order_date from orders
+) as t;
+
+
+select *,
+    datediff(lead(order_date)over(PARTITION by customer_id order by order_date),order_date) as gap_between_orders
+from orders;
+
+
+4. Find employees whose salary is above department average using window function
+
+select *,avg(salary)over(PARTITION by dept_id order by salary) as dept_avg
+from emp;
+
+
+🧾 4. CTE (Common Table Expressions)
+🟢 Easy
+Create CTE to calculate average salary
+Use CTE to get total orders per customer
+Filter employees using CTE
+Simple SELECT using CTE
+🟡 Medium
+Use CTE to find employees earning above department average
+Use CTE to rank employees
+Use CTE for total spending per customer and filter > 5000
+Combine CTE with JOIN
+🔴 Hard
+Use multiple CTEs to find top customers
+Recursive CTE (if hierarchy added)
+Convert correlated subquery into CTE
+Find top 3 employees per department using CTE
