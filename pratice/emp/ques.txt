@@ -63,6 +63,8 @@ Find employees whose salary is greater than all employees in HR
 Find customers who spent more than every customer in Pune
 Get top 3 salaries using subquery only (no window functions)
 Find employees whose salary is above average of top 5 salaries
+Find the employee with the lowest salary in each department without using GROUP BY or MIN()
+Find customers who made an order in every active month of 2024
 
 
 📊 2. GROUP BY
@@ -114,6 +116,8 @@ Find top 2 departments by total salary
 Get employees working in departments with max total salary
 Find customers whose spending is above average of all customers
 Find department where sum of salary > sum of another department
+Identify customers who placed orders on consecutive days
+Find departments that have at least 2 employees earning more than 60,000
 
 
 
@@ -200,23 +204,133 @@ from orders;
 
 4. Find employees whose salary is above department average using window function
 
-select *,avg(salary)over(PARTITION by dept_id order by salary) as dept_avg
-from emp;
+
+select * from (
+SELECT *, 
+AVG(salary) OVER(PARTITION BY dept_id ) AS dept_avg
+FROM emp) as t 
+where t.salary > t.dept_avg;
+
+5. Calculate the percent rank of employees within their departments based on salary
+6. Find the employee who had the largest salary gap between them and the next highest paid employee in their department
 
 
 🧾 4. CTE (Common Table Expressions)
+
 🟢 Easy
-Create CTE to calculate average salary
-Use CTE to get total orders per customer
+
+1. Create CTE to calculate average salary
+
+with avg_sal as 
+(
+    select avg(salary) as avg_salary from emp
+)
+select * from avg_sal;
+
+
+2. Use CTE to get total orders per customer
+
+with total_orders as 
+(
+    select customer_id,count(order_id) from orders
+    group by customer_id
+)
+select * from total_orders;
+
+
 Filter employees using CTE
 Simple SELECT using CTE
 🟡 Medium
 Use CTE to find employees earning above department average
+
+with dept_avg as 
+(
+select * from (
+SELECT *, 
+AVG(salary) OVER(PARTITION BY dept_id ) AS dept_avg
+FROM emp) as t 
+where t.salary > t.dept_avg
+) 
+select * from dept_avg;
+
 Use CTE to rank employees
-Use CTE for total spending per customer and filter > 5000
-Combine CTE with JOIN
+
+select * from (
+select *,rank()over(PARTITION by dept_id order by salary desc) as rnk from emp) as t 
+where t.rnk <= 2;
+
+with t as (
+    select *,rank()over(PARTITION by dept_id order by salary desc) as rnk from emp
+) 
+select * from t where t.rnk <= 2;
+
+3. Use CTE for total spending per customer and filter > 5000
+
+with t as (
+    select customer_id,sum(amount) as total_spending from orders
+    group by customer_id
+) 
+select * from t where t.total_spending > 2000;
+
+
+4. Combine CTE with JOIN
+
+with t as (
+    select customer_id,sum(amount) as total_spending from orders
+    group by customer_id
+) 
+select * from t join cust on t.customer_id = cust.customer_id;
+
 🔴 Hard
-Use multiple CTEs to find top customers
-Recursive CTE (if hierarchy added)
-Convert correlated subquery into CTE
-Find top 3 employees per department using CTE
+1. Use multiple CTEs to find top customers
+
+with t as (
+    select customer_id,sum(amount) as total_spending from orders
+    group by customer_id
+) 
+select * from t join cust on t.customer_id = cust.customer_id;
+
+
+2. Recursive CTE (if hierarchy added)
+3. Convert correlated subquery into CTE
+
+
+
+4. Find top 3 employees per department using CTE
+
+with t as (
+    select *,rank()over(PARTITION by dept_id order by salary desc) as rnk from emp
+) 
+select * from t where t.rnk <= 3;
+
+5. Use a recursive CTE to find hierarchical relationships (if manager_id was added)
+6. Use a CTE to isolate top 20% paying customers and another CTE to find what percentage of total revenue they contribute
+
+
+🤝 5. JOINS
+
+🟢 Easy
+1. List all employee names along with their department names.
+2. Retrieve all orders with customer names and cities.
+3. Show all customers and their orders, including customers with no orders.
+
+🟡 Medium
+1. Find customers who have never placed an order using a JOIN.
+2. List departments that have no employees using a LEFT JOIN.
+3. Find employees who work in the same department as 'Ashu' using a Self Join.
+
+🔴 Hard
+1. Find pairs of customers from the same city who have placed orders on the same day.
+2. Find the department with the highest total order amount placed by customers.
+3. Retrieve employees who earn more than the average salary of the IT department, using joins.
+
+🔗 6. CORRELATED QUERIES
+
+🟡 Medium
+1. Find employees whose salary is greater than the average salary of their own department.
+2. List customers who have placed an order with an amount greater than their personal average order amount.
+
+🔴 Hard
+1. Find the Nth highest salary for each department without using window functions.
+2. Identify the most recent order for each customer using a correlated subquery instead of GROUP BY.
+3. Delete duplicate customer records keeping only the one with the lowest customer_id (using correlated subquery logic).
